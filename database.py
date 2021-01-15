@@ -18,6 +18,8 @@ class Database:
                 self._records = load(file)
 
     def set(self, dt: datetime, text):
+        if dt in self._records:
+            raise Exception('This datetime has already been taken.')
         self._records[dt] = text
 
     def get(self, dt: datetime):
