@@ -1,13 +1,24 @@
 from datetime import datetime
+from pickle import dump, load
 
 
 class Database:
-    _texts = {}
+    def __init__(self, filename=None):
+        self._filename = filename
+        self._records = {}
 
-    @staticmethod
-    def set(dt: datetime, text):
-        Database._texts[dt] = text
+    def save(self):
+        if self._filename:
+            with open(self._filename, 'wb') as file:
+                dump(self._records, file)
 
-    @staticmethod
-    def get(dt: datetime):
-        return Database._texts[dt]
+    def load(self):
+        if self._filename:
+            with open(self._filename, 'rb') as file:
+                self._records = load(file)
+
+    def set(self, dt: datetime, text):
+        self._records[dt] = text
+
+    def get(self, dt: datetime):
+        return self._records[dt]
