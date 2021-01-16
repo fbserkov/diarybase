@@ -10,7 +10,7 @@ class TestDiaryBase(unittest.TestCase):
         self._filename = 'test.db'
         self._storage = Storage(self._filename)
 
-    def test_initial(self):
+    def test_set_and_get(self):
         dt = datetime(year=2021, month=1, day=15, hour=19, minute=46)
         note_in = Note('Text.')
         self._storage.set(dt, note_in)
@@ -33,6 +33,14 @@ class TestDiaryBase(unittest.TestCase):
         self._storage.set(dt, Note('First text.'))
         with self.assertRaises(Exception):
             self._storage.set(dt, Note('Second text.'))
+
+    def test_display_one_note(self):
+        dt = datetime(year=2021, month=1, day=16, hour=19, minute=4)
+        self._storage.set(dt, Note('Text for display.'))
+        self.assertEqual(
+            '[16.01.2021 19:04:00] Text for display.\n',
+            self._storage.display(),
+        )
 
 
 if __name__ == '__main__':

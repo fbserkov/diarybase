@@ -24,3 +24,9 @@ class Storage:
 
     def get(self, dt: datetime) -> Note:
         return self._notes[dt]
+
+    def display(self):
+        dt, note = list(self._notes.items())[0]
+        str_dt = dt.strftime('%d.%m.%Y %H:%M:%S')
+        str_note = note.get_text()
+        return f'[{str_dt}] {str_note}\n'
