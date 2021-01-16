@@ -42,6 +42,18 @@ class TestDiaryBase(unittest.TestCase):
             self._storage.display(),
         )
 
+    def test_display_two_notes(self):
+        dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
+        self._storage.set(dt_1, Note('First text for display.'))
+        dt_2 = datetime(year=2021, month=1, day=16, hour=19, minute=20)
+        self._storage.set(dt_2, Note('Second text for display.'))
+
+        self.assertEqual(
+            '[16.01.2021 19:04:00] First text for display.\n'
+            '[16.01.2021 19:20:00] Second text for display.\n',
+            self._storage.display(),
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
