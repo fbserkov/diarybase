@@ -1,3 +1,6 @@
 # Project exclude paths
 /venv/
 test.db
+
+main.db
+requests.py

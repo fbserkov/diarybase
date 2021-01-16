@@ -2,7 +2,7 @@ from datetime import datetime
 from pickle import dump, load
 
 
-class Database:
+class Storage:
     def __init__(self, filename):
         self._filename = filename
         self._records = {}
