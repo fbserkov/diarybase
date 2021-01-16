@@ -34,6 +34,14 @@ class TestDiaryBase(unittest.TestCase):
         with self.assertRaises(Exception):
             self._storage.set(dt, Note('Second text.'))
 
+    def test_reset_to_existing_datetime(self):
+        dt = datetime(year=2021, month=1, day=16, hour=19, minute=46)
+        correct_note = Note('Correct text.')
+        self._storage.set(dt, Note('Incorrect text.'))
+        self._storage.set(dt, correct_note, reset=True)
+        note_load = self._storage.get(dt)
+        self.assertEqual(correct_note, note_load)
+
     def test_display_one_note(self):
         dt = datetime(year=2021, month=1, day=16, hour=19, minute=4)
         self._storage.set(dt, Note('Text for display.'))

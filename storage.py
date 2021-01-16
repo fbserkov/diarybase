@@ -17,8 +17,8 @@ class Storage:
         with open(self._filename, 'rb') as file:
             self._notes = load(file)
 
-    def set(self, dt: datetime, note: Note):
-        if dt in self._notes:
+    def set(self, dt: datetime, note: Note, reset=False):
+        if dt in self._notes and not reset:
             raise Exception('This datetime has already been taken.')
         self._notes[dt] = note
 
