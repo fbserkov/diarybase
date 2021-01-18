@@ -29,6 +29,5 @@ class Storage:
         output = ''
         for dt, note in self._notes.items():
             str_dt = dt.strftime('%d.%m.%Y %H:%M:%S')
-            str_note = note.get_text()
-            output += f'[{str_dt}] {str_note}\n'
+            output += f'[{str_dt}] {note}\n'
         return output

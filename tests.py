@@ -5,7 +5,13 @@ from note import Note
 from storage import Storage
 
 
-class TestDiaryBase(unittest.TestCase):
+class TestNote(unittest.TestCase):
+    def test_str(self):
+        note = Note('Text.')
+        self.assertEqual('Text.', str(note))
+
+
+class TestStorage(unittest.TestCase):
     def setUp(self) -> None:
         self._filename = 'test.db'
         self._storage = Storage(self._filename)
