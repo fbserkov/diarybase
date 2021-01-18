@@ -34,12 +34,6 @@ class TestStorage(unittest.TestCase):
         note_load = storage.get(dt)
         self.assertEqual(note_save, note_load)
 
-    def test_set_to_existing_datetime(self):
-        dt = datetime(year=2021, month=1, day=15, hour=21, minute=46)
-        self._storage.set(dt, Note('First text.'))
-        with self.assertRaises(Exception):
-            self._storage.set(dt, Note('Second text.'))
-
     def test_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
         self._storage.set(dt_1, Note('First text for display.'))
