@@ -1,26 +1,26 @@
 from pickle import dump, load
 
-from note import Note
+from record import Record
 
 
 class Storage:
     def __init__(self, filename):
         self._filename = filename
-        self._notes = []
+        self._records = []
 
     def __len__(self):
-        return len(self._notes)
+        return len(self._records)
 
     def __str__(self):
-        return '\n'.join(str(note) for note in self._notes)
+        return '\n'.join(str(record) for record in self._records)
 
-    def append(self, note: Note):
-        self._notes.append(note)
+    def append(self, r: Record):
+        self._records.append(r)
 
     def save(self):
         with open(self._filename, 'wb') as file:
-            dump(self._notes, file)
+            dump(self._records, file)
 
     def load(self):
         with open(self._filename, 'rb') as file:
-            self._notes = load(file)
+            self._records = load(file)
