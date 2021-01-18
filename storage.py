@@ -9,6 +9,13 @@ class Storage:
         self._filename = filename
         self._notes = {}
 
+    def __str__(self):
+        output = ''
+        for dt, note in self._notes.items():
+            str_dt = dt.strftime('%d.%m.%Y %H:%M:%S')
+            output += f'[{str_dt}] {note}\n'
+        return output
+
     def save(self):
         with open(self._filename, 'wb') as file:
             dump(self._notes, file)
@@ -24,10 +31,3 @@ class Storage:
 
     def get(self, dt: datetime) -> Note:
         return self._notes[dt]
-
-    def display(self):
-        output = ''
-        for dt, note in self._notes.items():
-            str_dt = dt.strftime('%d.%m.%Y %H:%M:%S')
-            output += f'[{str_dt}] {note}\n'
-        return output

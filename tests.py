@@ -48,15 +48,7 @@ class TestStorage(unittest.TestCase):
         note_load = self._storage.get(dt)
         self.assertEqual(correct_note, note_load)
 
-    def test_display_one_note(self):
-        dt = datetime(year=2021, month=1, day=16, hour=19, minute=4)
-        self._storage.set(dt, Note('Text for display.'))
-        self.assertEqual(
-            '[16.01.2021 19:04:00] Text for display.\n',
-            self._storage.display(),
-        )
-
-    def test_display_two_notes(self):
+    def test_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
         self._storage.set(dt_1, Note('First text for display.'))
         dt_2 = datetime(year=2021, month=1, day=16, hour=19, minute=20)
@@ -65,7 +57,7 @@ class TestStorage(unittest.TestCase):
         self.assertEqual(
             '[16.01.2021 19:04:00] First text for display.\n'
             '[16.01.2021 19:20:00] Second text for display.\n',
-            self._storage.display(),
+            str(self._storage),
         )
 
 
