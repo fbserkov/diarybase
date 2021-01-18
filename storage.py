@@ -1,4 +1,3 @@
-from datetime import datetime
 from pickle import dump, load
 
 from note import Note
@@ -8,6 +7,9 @@ class Storage:
     def __init__(self, filename):
         self._filename = filename
         self._notes = []
+
+    def __len__(self):
+        return len(self._notes)
 
     def __str__(self):
         return '\n'.join(str(note) for note in self._notes)

@@ -1,6 +1,9 @@
+from datetime import datetime
+
+
 class Note:
-    def __init__(self, dt, text):
-        self._dt = dt
+    def __init__(self, dt=None, text=None):
+        self._dt = dt if dt else datetime.now()
         self._text = text
 
     def __str__(self):
