@@ -1,6 +1,7 @@
 # Project exclude paths
 /venv/
-tags.py
-test.db
+dic.txt
 main.db
 requests.py
+tags.py
+test.db
