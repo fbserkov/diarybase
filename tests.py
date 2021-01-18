@@ -3,10 +3,35 @@ from datetime import datetime
 
 from record import Record
 from storage import Storage
+from tags import TAGS
+
+TAGS[0] = 'not specified'
+TAGS[1] = 'test tag'
 
 
 class TestNote(unittest.TestCase):
-    def test_str(self):
+    def test_empty(self):
+        r = Record()
+        self.assertEqual('(not specified)', str(r)[22:])
+
+    def test_dt(self):
+        dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
+        r = Record(dt)
+        self.assertEqual('[18.01.2021 18:26:00] (not specified)', str(r))
+
+    def test_tag_id(self):
+        dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
+        r = Record(dt, tag_id=1)
+        self.assertEqual('[18.01.2021 18:40:00] (test tag)', str(r))
+
+    def test_is_active(self):
+        dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
+        r = Record(dt, tag_id=1, is_active=True)
+        self.assertEqual('[18.01.2021 18:40:00] (test tag: start)', str(r))
+        r = Record(dt, tag_id=1, is_active=False)
+        self.assertEqual('[18.01.2021 18:40:00] (test tag: end)', str(r))
+
+    def test_note(self):
         dt = datetime(year=2021, month=1, day=18, hour=11, minute=11)
         r = Record(dt, note='note')
         self.assertEqual('[18.01.2021 11:11:00] (not specified) note', str(r))
