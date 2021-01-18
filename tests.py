@@ -16,13 +16,6 @@ class TestStorage(unittest.TestCase):
         self._filename = 'test.db'
         self._storage = Storage(self._filename)
 
-    def test_set_and_get(self):
-        dt = datetime(year=2021, month=1, day=15, hour=19, minute=46)
-        note_in = Note('Text.')
-        self._storage.set(dt, note_in)
-        note_out = self._storage.get(dt)
-        self.assertEqual(note_in, note_out)
-
     def test_save_and_load(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
         note_save = Note('Text.')
