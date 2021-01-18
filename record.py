@@ -16,7 +16,7 @@ class Record:
 
     def __str__(self):
         result = '[' + self._dt_to_str() + ']'
-        result += ' (' + self._tag_id_and_is_active_to_str() + ')'
+        result += ' <' + self._tag_id_and_is_active_to_str() + '>'
         if self._note:
             result += ' ' + self._note
         return result
