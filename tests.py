@@ -5,19 +5,19 @@ from record import Record
 from storage import Storage
 from tags import TAGS
 
-TAGS[0] = 'not specified'
+TAGS[0] = 'no tag'
 TAGS[1] = 'test tag'
 
 
 class TestNote(unittest.TestCase):
     def test_empty(self):
         r = Record()
-        self.assertEqual('<not specified>', str(r)[22:])
+        self.assertEqual('<no tag>', str(r)[22:])
 
     def test_dt(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
         r = Record(dt)
-        self.assertEqual('[18.01.2021 18:26:00] <not specified>', str(r))
+        self.assertEqual('[18.01.2021 18:26:00] <no tag>', str(r))
 
     def test_tag_id(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
@@ -34,7 +34,7 @@ class TestNote(unittest.TestCase):
     def test_note(self):
         dt = datetime(year=2021, month=1, day=18, hour=11, minute=11)
         r = Record(dt, note='note')
-        self.assertEqual('[18.01.2021 11:11:00] <not specified> note', str(r))
+        self.assertEqual('[18.01.2021 11:11:00] <no tag> note', str(r))
 
 
 class TestStorage(unittest.TestCase):
@@ -49,8 +49,19 @@ class TestStorage(unittest.TestCase):
         self._storage.append(Record(dt_2, note='second note'))
 
         self.assertEqual(
-            '[16.01.2021 19:04:00] <not specified> first note\n'
-            '[16.01.2021 19:20:00] <not specified> second note',
+            '[16.01.2021 19:04:00] <no tag> first note\n'
+            '[16.01.2021 19:20:00] <no tag> second note',
+            str(self._storage),
+        )
+
+    def test_many_str(self):
+        self._storage = Storage(self._filename, str_len=10)
+        dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
+        for _ in range(100):
+            self._storage.append(Record(dt, note='note'))
+
+        self.assertEqual(
+            10 * '[19.01.2021 19:38:00] <no tag> note\n' + 'last 10 from 100',
             str(self._storage),
         )
 
@@ -62,8 +73,7 @@ class TestStorage(unittest.TestCase):
 
         storage = Storage(self._filename)
         storage.load()
-        self.assertEqual(
-            '[15.01.2021 21:13:00] <not specified> note', str(storage))
+        self.assertEqual('[15.01.2021 21:13:00] <no tag> note', str(storage))
 
 
 if __name__ == '__main__':

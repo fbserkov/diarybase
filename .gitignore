@@ -2,6 +2,8 @@
 /venv/
 dic.txt
 main.db
-requests.py
+reformation.py
+spellchecking.py
 tags.py
 test.db
+usage.py

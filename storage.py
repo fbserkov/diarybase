@@ -4,15 +4,23 @@ from record import Record
 
 
 class Storage:
-    def __init__(self, filename):
+    def __init__(self, filename, str_len=100):
         self._filename = filename
+        self._str_len = str_len
         self._records = []
 
     def __len__(self):
         return len(self._records)
 
     def __str__(self):
-        return '\n'.join(str(record) for record in self._records)
+        str_records = self._records[-self._str_len:]
+        self._append_len_prompt(str_records)
+        return '\n'.join(str(record) for record in str_records)
+
+    def _append_len_prompt(self, str_records):
+        length = len(self._records)
+        if self._str_len < length:
+            str_records.append(f'last {self._str_len} from {length}')
 
     def append(self, r: Record):
         self._records.append(r)
