@@ -34,4 +34,4 @@ class Record:
         return self._note
 
     def set_note(self, note):
-        self._note = note  # TODO: check
+        self._note = note

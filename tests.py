@@ -4,6 +4,7 @@ from datetime import datetime
 from database import Database
 from record import Record
 from recordlist import RecordList
+from spellchecker import SpellChecker
 from tags import TAGS
 
 TAGS[0] = 'no tag'
@@ -42,6 +43,7 @@ class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
         self._db = Database('test.db')
         self._record_list = RecordList(self._db)
+        self._record_list.save()
 
     def test_add_and_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
@@ -76,6 +78,32 @@ class TestRecordList(unittest.TestCase):
         record_list.load()
         self.assertEqual(
             '[15.01.2021 21:13:00] <no tag> note', str(record_list))
+
+
+class TestSpellChecker(unittest.TestCase):
+    def setUp(self) -> None:
+        self._db = Database('test.db')
+        self._sc = SpellChecker(self._db)
+        self._sc.save()
+
+    def test_empty(self):
+        with self.assertRaises(Exception):
+            self._sc.check_note('note')
+
+    def test_update(self):
+        self._sc.check_note('note', update=True)
+
+    def test_save_and_load(self):
+        self._sc.check_note('note', update=True)
+
+        sc = SpellChecker(self._db)
+        sc.load()
+        with self.assertRaises(Exception):
+            sc.check_note('note')
+
+        self._sc.save()
+        sc.load()
+        sc.check_note('note')
 
 
 if __name__ == '__main__':

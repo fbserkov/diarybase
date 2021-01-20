@@ -12,10 +12,13 @@ class SpellChecker:
     def save(self):
         self._db.save('words', self._words)
 
-    def check_note(self, note):
+    def check_note(self, note, update=False):
         result = self._get_note_set(note) - self._words
         if result:
-            raise Exception(result)
+            if update:
+                self._words.update(result)
+            else:
+                raise Exception(result)
 
     def _get_note_set(self, note):
         result = set()
