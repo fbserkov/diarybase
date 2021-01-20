@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from datetime_format import dt_to_str
 from tags import TAGS
 
 
@@ -15,14 +16,11 @@ class Record:
         self._is_active = is_active
 
     def __str__(self):
-        result = '[' + self._dt_to_str() + ']'
+        result = '[' + dt_to_str(self._dt) + ']'
         result += ' <' + self._tag_id_and_is_active_to_str() + '>'
         if self._note:
             result += ' ' + self._note
         return result
-
-    def _dt_to_str(self):
-        return self._dt.strftime('%d.%m.%Y %H:%M:%S')
 
     def _tag_id_and_is_active_to_str(self):
         result = TAGS[self._tag_id]
@@ -31,3 +29,9 @@ class Record:
         if self._is_active:
             return result + ': start'
         return result + ': end'
+
+    def get_note(self):
+        return self._note
+
+    def set_note(self, note):
+        self._note = note  # TODO: check
