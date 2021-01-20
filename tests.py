@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime
 
+from database import Database
 from record import Record
 from recordlist import RecordList
 from tags import TAGS
@@ -39,8 +40,8 @@ class TestNote(unittest.TestCase):
 
 class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
-        self._filename = 'test.db'
-        self._record_list = RecordList(self._filename)
+        self._db = Database('test.db')
+        self._record_list = RecordList(self._db)
 
     def test_add_and_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
@@ -55,7 +56,7 @@ class TestRecordList(unittest.TestCase):
         )
 
     def test_many_str(self):
-        self._record_list = RecordList(self._filename, str_len=10)
+        self._record_list = RecordList(self._db, str_len=10)
         dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
         for _ in range(100):
             self._record_list.append(Record(dt, note='note'))
@@ -71,7 +72,7 @@ class TestRecordList(unittest.TestCase):
         self._record_list.append(r)
         self._record_list.save()
 
-        record_list = RecordList(self._filename)
+        record_list = RecordList(self._db)
         record_list.load()
         self.assertEqual(
             '[15.01.2021 21:13:00] <no tag> note', str(record_list))

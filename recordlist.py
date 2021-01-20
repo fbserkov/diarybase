@@ -1,11 +1,10 @@
-from pickle import dump, load
-
+from database import Database
 from record import Record
 
 
 class RecordList:
-    def __init__(self, filename, str_len=100):
-        self._filename = filename
+    def __init__(self, db: Database, str_len=100):
+        self._db = db
         self._str_len = str_len
         self._records = []
 
@@ -26,9 +25,7 @@ class RecordList:
         self._records.append(r)
 
     def save(self):
-        with open(self._filename, 'wb') as file:
-            dump(self._records, file)
+        self._db.save(self._records)
 
     def load(self):
-        with open(self._filename, 'rb') as file:
-            self._records = load(file)
+        self._records = self._db.load()
