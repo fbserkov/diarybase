@@ -3,7 +3,7 @@ from pickle import dump, load
 from record import Record
 
 
-class Storage:
+class RecordList:
     def __init__(self, filename, str_len=100):
         self._filename = filename
         self._str_len = str_len

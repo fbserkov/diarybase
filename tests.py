@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from record import Record
-from storage import Storage
+from recordlist import RecordList
 from tags import TAGS
 
 TAGS[0] = 'no tag'
@@ -37,43 +37,44 @@ class TestNote(unittest.TestCase):
         self.assertEqual('[18.01.2021 11:11:00] <no tag> note', str(r))
 
 
-class TestStorage(unittest.TestCase):
+class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
         self._filename = 'test.db'
-        self._storage = Storage(self._filename)
+        self._record_list = RecordList(self._filename)
 
     def test_add_and_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
-        self._storage.append(Record(dt_1, note='first note'))
+        self._record_list.append(Record(dt_1, note='first note'))
         dt_2 = datetime(year=2021, month=1, day=16, hour=19, minute=20)
-        self._storage.append(Record(dt_2, note='second note'))
+        self._record_list.append(Record(dt_2, note='second note'))
 
         self.assertEqual(
             '[16.01.2021 19:04:00] <no tag> first note\n'
             '[16.01.2021 19:20:00] <no tag> second note',
-            str(self._storage),
+            str(self._record_list),
         )
 
     def test_many_str(self):
-        self._storage = Storage(self._filename, str_len=10)
+        self._record_list = RecordList(self._filename, str_len=10)
         dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
         for _ in range(100):
-            self._storage.append(Record(dt, note='note'))
+            self._record_list.append(Record(dt, note='note'))
 
         self.assertEqual(
             10 * '[19.01.2021 19:38:00] <no tag> note\n' + 'last 10 from 100',
-            str(self._storage),
+            str(self._record_list),
         )
 
     def test_save_and_load(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
         r = Record(dt, note='note')
-        self._storage.append(r)
-        self._storage.save()
+        self._record_list.append(r)
+        self._record_list.save()
 
-        storage = Storage(self._filename)
-        storage.load()
-        self.assertEqual('[15.01.2021 21:13:00] <no tag> note', str(storage))
+        record_list = RecordList(self._filename)
+        record_list.load()
+        self.assertEqual(
+            '[15.01.2021 21:13:00] <no tag> note', str(record_list))
 
 
 if __name__ == '__main__':
