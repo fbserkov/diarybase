@@ -1,6 +1,5 @@
 # Project exclude paths
 /venv/
-dic.txt
 main.db
 reformation.py
 tags.py

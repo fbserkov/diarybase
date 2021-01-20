@@ -24,8 +24,8 @@ class RecordList:
     def append(self, r: Record):
         self._records.append(r)
 
-    def save(self):
-        self._db.save('records', self._records)
-
     def load(self):
         self._records = self._db.load('records')
+
+    def save(self):
+        self._db.save('records', self._records)
