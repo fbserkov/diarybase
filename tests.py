@@ -5,10 +5,32 @@ from database import Database
 from record import Record
 from recordlist import RecordList
 from spellchecker import SpellChecker
+from tagdict import TagDict
 from tags import TAGS
 
 TAGS[0] = 'no tag'
 TAGS[1] = 'test tag'
+
+
+class TestTagDict(unittest.TestCase):
+    def setUp(self) -> None:
+        self._db = Database('test.db')
+        self._tag_dict = TagDict(self._db)
+        self._tag_dict.save()
+
+    def test_add(self):
+        self._tag_dict.add('no tag')
+        self._tag_dict.add('test tag')
+        self.assertEqual(
+            {1: 'no tag', 2: 'test tag'}, self._tag_dict.get_dict())
+
+    def test_save_and_load(self):
+        test_dict = {1: 'no tag', 2: 'test tag'}
+        self._tag_dict.set_dict(test_dict)
+        self._tag_dict.save()
+        td = TagDict(self._db)
+        td.load()
+        self.assertEqual(test_dict, td.get_dict())
 
 
 class TestNote(unittest.TestCase):
@@ -106,6 +128,7 @@ class TestSpellChecker(unittest.TestCase):
         sc.check_note('note')
 
 
+@unittest.skip
 class TestRecordManager(unittest.TestCase):
     def test_add(self):
         db = Database('test.db')
