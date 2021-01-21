@@ -106,5 +106,15 @@ class TestSpellChecker(unittest.TestCase):
         sc.check_note('note')
 
 
+class TestRecordManager(unittest.TestCase):
+    def test_add(self):
+        db = Database('test.db')
+        rm = RecordManager(db)
+        dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
+        rm.add_record(dt, tag='tag', note='note')
+        self.assertEqual(
+            '[21.01.2021 21:15:00] <tag> note\n', str(rm.get_record_list()))
+
+
 if __name__ == '__main__':
     unittest.main()
