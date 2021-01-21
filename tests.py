@@ -22,7 +22,7 @@ class TestTagDict(unittest.TestCase):
         self._tag_dict.add('no tag')
         self._tag_dict.add('test tag')
         self.assertEqual(
-            {1: 'no tag', 2: 'test tag'}, self._tag_dict.get_dict())
+            {0: 'no tag', 1: 'test tag'}, self._tag_dict.get_dict())
 
     def test_save_and_load(self):
         test_dict = {1: 'no tag', 2: 'test tag'}

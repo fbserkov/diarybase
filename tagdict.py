@@ -17,3 +17,6 @@ class TagDict:
 
     def get_dict(self) -> dict:
         return self._tags
+
+    def add(self, tag: str):
+        self._tags[len(self._tags)] = tag
