@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime
 
+from database import db
 from record import Record
 from recordlist import RecordList
 from spellchecker import SpellChecker
@@ -13,8 +14,12 @@ TAGS[1] = 'test tag'
 
 class TestTagDict(unittest.TestCase):
     def setUp(self) -> None:
+        db.clear()
+        db.save()
         self._tag_dict = TagDict()
-        self._tag_dict.save()
+
+    def test_get_dict(self):
+        self.assertEqual({}, self._tag_dict.get_dict())
 
     def test_add(self):
         self._tag_dict.add('no tag')
@@ -22,13 +27,20 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(
             {0: 'no tag', 1: 'test tag'}, self._tag_dict.get_dict())
 
-    def test_save_and_load(self):
-        test_dict = {1: 'no tag', 2: 'test tag'}
-        self._tag_dict.set_dict(test_dict)
-        self._tag_dict.save()
+    def test_set_dict(self):
+        a_dict = {1: 'no tag', 2: 'test tag'}
+        self._tag_dict.set_dict(a_dict)
+        self.assertEqual(a_dict, self._tag_dict.get_dict())
+
+    def test_db(self):
+        a_dict = {1: 'no tag', 2: 'test tag'}
+        self._tag_dict.set_dict(a_dict)
+        db.save()
+        db.clear()
+
+        db.load()
         td = TagDict()
-        td.load()
-        self.assertEqual(test_dict, td.get_dict())
+        self.assertEqual(a_dict, td.get_dict())
 
 
 class TestNote(unittest.TestCase):
@@ -57,16 +69,21 @@ class TestNote(unittest.TestCase):
 
     def test_note(self):
         dt = datetime(year=2021, month=1, day=18, hour=11, minute=11)
-        r = Record(dt, note='note')
-        self.assertEqual('[18.01.2021 11:11:00] <no tag> note', r.to_str(TAGS))
+        r = Record(dt, note='test')
+        self.assertEqual('[18.01.2021 11:11:00] <no tag> test', r.to_str(TAGS))
 
 
 class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
+        db.clear()
+        db.save()
         self._record_list = RecordList()
-        self._record_list.save()
 
-    def test_add_and_str(self):
+    def test_append(self):
+        self._record_list.append(Record())
+        self.assertEqual(1, len(self._record_list))
+
+    def test_str(self):
         dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
         self._record_list.append(Record(dt_1, note='first note'))
         dt_2 = datetime(year=2021, month=1, day=16, hour=19, minute=20)
@@ -78,52 +95,53 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
-    def test_many_str(self):
-        self._record_list = RecordList(str_len=10)
+    def test_str_len(self):
+        self._record_list = RecordList(str_len=5)
         dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
-        for _ in range(100):
-            self._record_list.append(Record(dt, note='note'))
+        for _ in range(10):
+            self._record_list.append(Record(dt, note='test'))
 
         self.assertEqual(
-            10 * '[19.01.2021 19:38:00] <no tag> note\n' + 'last 10 from 100',
+            5 * '[19.01.2021 19:38:00] <no tag> test\n' + 'last 5 from 10',
             str(self._record_list),
         )
 
-    def test_save_and_load(self):
+    def test_db(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
-        r = Record(dt, note='note')
+        r = Record(dt, note='test')
         self._record_list.append(r)
-        self._record_list.save()
+        db.save()
+        db.clear()
 
+        db.load()
         record_list = RecordList()
-        record_list.load()
         self.assertEqual(
-            '[15.01.2021 21:13:00] <no tag> note', str(record_list))
+            '[15.01.2021 21:13:00] <no tag> test', str(record_list))
 
 
 class TestSpellChecker(unittest.TestCase):
     def setUp(self) -> None:
+        db.clear()
+        db.save()
         self._sc = SpellChecker()
-        self._sc.save()
 
     def test_empty(self):
         with self.assertRaises(Exception):
-            self._sc.check_note('note')
+            self._sc.check_note('test')
 
     def test_update(self):
-        self._sc.check_note('note', update=True)
+        self._sc.check_note('test', update=True)
 
-    def test_save_and_load(self):
-        self._sc.check_note('note', update=True)
-
-        sc = SpellChecker()
-        sc.load()
+    def test_db(self):
+        self._sc.check_note('test', update=True)
+        db.load()
         with self.assertRaises(Exception):
-            sc.check_note('note')
+            self._sc.check_note('test')
 
-        self._sc.save()
-        sc.load()
-        sc.check_note('note')
+        self._sc.check_note('test', update=True)
+        db.save()
+        db.load()
+        self._sc.check_note('test')
 
 
 @unittest.skip

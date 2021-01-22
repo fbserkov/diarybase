@@ -2,20 +2,11 @@ from database import db
 
 
 class SpellChecker:
-    def __init__(self):
-        self._words = set()
-
-    def load(self):
-        self._words = db.load('words')
-
-    def save(self):
-        db.save('words', self._words)
-
-    def check_note(self, note, update=False):
-        result = self._get_note_set(note) - self._words
+    def check_note(self, note: str, update=False):
+        result = self._get_note_set(note) - db.get_words()
         if result:
             if update:
-                self._words.update(result)
+                db.get_words().update(result)
             else:
                 raise Exception(result)
 

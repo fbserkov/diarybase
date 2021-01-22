@@ -2,20 +2,15 @@ from database import db
 
 
 class TagDict:
-    def __init__(self):
-        self._tags = {}
+    @staticmethod
+    def set_dict(tags: dict):
+        db.set_tags(tags)
 
-    def load(self):
-        self._tags = db.load('tags')
+    @staticmethod
+    def get_dict() -> dict:
+        return db.get_tags()
 
-    def save(self):
-        db.save('tags', self._tags)
-
-    def set_dict(self, tags: dict):
-        self._tags = tags
-
-    def get_dict(self) -> dict:
-        return self._tags
-
-    def add(self, tag: str):
-        self._tags[len(self._tags)] = tag
+    @staticmethod
+    def add(tag: str):
+        tags = db.get_tags()
+        tags[len(tags)] = tag
