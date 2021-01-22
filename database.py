@@ -1,6 +1,5 @@
+import os
 import shelve
-
-from config import CONFIG
 
 
 class Database:
@@ -16,4 +15,4 @@ class Database:
             return d[key]
 
 
-db: Database = Database(CONFIG['DB_NAME'])
+db: Database = Database(os.getenv('DIARYBASE_DBNAME'))

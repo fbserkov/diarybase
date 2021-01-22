@@ -1,9 +1,6 @@
 import unittest
 from datetime import datetime
 
-from config import CONFIG, TEST_DB_NAME
-CONFIG['DB_NAME'] = TEST_DB_NAME
-
 from record import Record
 from recordlist import RecordList
 from spellchecker import SpellChecker
