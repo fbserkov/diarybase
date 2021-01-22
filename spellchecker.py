@@ -1,16 +1,15 @@
-from database import Database
+from database import db
 
 
 class SpellChecker:
-    def __init__(self, db: Database):
-        self._db = db
+    def __init__(self):
         self._words = set()
 
     def load(self):
-        self._words = self._db.load('words')
+        self._words = db.load('words')
 
     def save(self):
-        self._db.save('words', self._words)
+        db.save('words', self._words)
 
     def check_note(self, note, update=False):
         result = self._get_note_set(note) - self._words

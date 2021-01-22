@@ -1,10 +1,9 @@
-from database import Database
+from database import db
 from record import Record
 
 
 class RecordList:
-    def __init__(self, db: Database, str_len=100):
-        self._db = db
+    def __init__(self, str_len: int = 100):
         self._str_len = str_len
         self._records = []
 
@@ -25,7 +24,7 @@ class RecordList:
         self._records.append(r)
 
     def load(self):
-        self._records = self._db.load('records')
+        self._records = db.load('records')
 
     def save(self):
-        self._db.save('records', self._records)
+        db.save('records', self._records)

@@ -1,14 +1,14 @@
 import unittest
 from datetime import datetime
 
-from database import Database, TEST_DB_NAME
+from config import CONFIG, TEST_DB_NAME
+CONFIG['DB_NAME'] = TEST_DB_NAME
+
 from record import Record
 from recordlist import RecordList
 from spellchecker import SpellChecker
 from tagdict import TagDict
 from tags import TAGS
-
-db = Database(TEST_DB_NAME)
 
 TAGS[0] = 'no tag'
 TAGS[1] = 'test tag'
@@ -16,7 +16,7 @@ TAGS[1] = 'test tag'
 
 class TestTagDict(unittest.TestCase):
     def setUp(self) -> None:
-        self._tag_dict = TagDict(db)
+        self._tag_dict = TagDict()
         self._tag_dict.save()
 
     def test_add(self):
@@ -29,7 +29,7 @@ class TestTagDict(unittest.TestCase):
         test_dict = {1: 'no tag', 2: 'test tag'}
         self._tag_dict.set_dict(test_dict)
         self._tag_dict.save()
-        td = TagDict(db)
+        td = TagDict()
         td.load()
         self.assertEqual(test_dict, td.get_dict())
 
@@ -64,7 +64,7 @@ class TestNote(unittest.TestCase):
 
 class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
-        self._record_list = RecordList(db)
+        self._record_list = RecordList()
         self._record_list.save()
 
     def test_add_and_str(self):
@@ -80,7 +80,7 @@ class TestRecordList(unittest.TestCase):
         )
 
     def test_many_str(self):
-        self._record_list = RecordList(db, str_len=10)
+        self._record_list = RecordList(str_len=10)
         dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
         for _ in range(100):
             self._record_list.append(Record(dt, note='note'))
@@ -96,7 +96,7 @@ class TestRecordList(unittest.TestCase):
         self._record_list.append(r)
         self._record_list.save()
 
-        record_list = RecordList(db)
+        record_list = RecordList()
         record_list.load()
         self.assertEqual(
             '[15.01.2021 21:13:00] <no tag> note', str(record_list))
@@ -104,7 +104,7 @@ class TestRecordList(unittest.TestCase):
 
 class TestSpellChecker(unittest.TestCase):
     def setUp(self) -> None:
-        self._sc = SpellChecker(db)
+        self._sc = SpellChecker()
         self._sc.save()
 
     def test_empty(self):
@@ -117,7 +117,7 @@ class TestSpellChecker(unittest.TestCase):
     def test_save_and_load(self):
         self._sc.check_note('note', update=True)
 
-        sc = SpellChecker(db)
+        sc = SpellChecker()
         sc.load()
         with self.assertRaises(Exception):
             sc.check_note('note')
@@ -130,7 +130,7 @@ class TestSpellChecker(unittest.TestCase):
 @unittest.skip
 class TestRecordManager(unittest.TestCase):
     def test_add(self):
-        rm = RecordManager(db)
+        rm = RecordManager()
         dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
         rm.add_record(dt, tag='tag', note='note')
         self.assertEqual(

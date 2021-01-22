@@ -1,16 +1,15 @@
-from database import Database
+from database import db
 
 
 class TagDict:
-    def __init__(self, db: Database):
-        self._db = db
+    def __init__(self):
         self._tags = {}
 
     def load(self):
-        self._tags = self._db.load('tags')
+        self._tags = db.load('tags')
 
     def save(self):
-        self._db.save('tags', self._tags)
+        db.save('tags', self._tags)
 
     def set_dict(self, tags: dict):
         self._tags = tags

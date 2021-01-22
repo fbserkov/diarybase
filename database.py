@@ -1,7 +1,6 @@
 import shelve
 
-MAIN_DB_NAME = 'main.db'
-TEST_DB_NAME = 'test.db'
+from config import CONFIG
 
 
 class Database:
@@ -17,4 +16,4 @@ class Database:
             return d[key]
 
 
-db = Database(MAIN_DB_NAME)
+db: Database = Database(CONFIG['DB_NAME'])
