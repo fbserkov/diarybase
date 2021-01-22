@@ -1,6 +1,8 @@
 from database import db
 from record import Record
 
+from tags import TAGS
+
 
 class RecordList:
     def __init__(self, str_len: int = 100):
@@ -12,13 +14,14 @@ class RecordList:
 
     def __str__(self):
         str_records = self._records[-self._str_len:]
-        self._append_len_prompt(str_records)
-        return '\n'.join(str(record) for record in str_records)
+        result = '\n'.join(record.to_str(TAGS) for record in str_records)
+        return self._get_len_prompt(result)
 
-    def _append_len_prompt(self, str_records):
+    def _get_len_prompt(self, result) -> str:
         length = len(self._records)
         if self._str_len < length:
-            str_records.append(f'last {self._str_len} from {length}')
+            return result + f'\nlast {self._str_len} from {length}'
+        return result
 
     def append(self, r: Record):
         self._records.append(r)

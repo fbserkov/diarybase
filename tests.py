@@ -37,29 +37,31 @@ class TestTagDict(unittest.TestCase):
 class TestNote(unittest.TestCase):
     def test_empty(self):
         r = Record()
-        self.assertEqual('<no tag>', str(r)[22:])
+        self.assertEqual('<no tag>', r.to_str(TAGS)[22:])
 
     def test_dt(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
         r = Record(dt)
-        self.assertEqual('[18.01.2021 18:26:00] <no tag>', str(r))
+        self.assertEqual('[18.01.2021 18:26:00] <no tag>', r.to_str(TAGS))
 
     def test_tag_id(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
         r = Record(dt, tag_id=1)
-        self.assertEqual('[18.01.2021 18:40:00] <test tag>', str(r))
+        self.assertEqual('[18.01.2021 18:40:00] <test tag>', r.to_str(TAGS))
 
     def test_is_active(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
         r = Record(dt, tag_id=1, is_active=True)
-        self.assertEqual('[18.01.2021 18:40:00] <test tag: start>', str(r))
+        self.assertEqual(
+            '[18.01.2021 18:40:00] <test tag: start>', r.to_str(TAGS))
         r = Record(dt, tag_id=1, is_active=False)
-        self.assertEqual('[18.01.2021 18:40:00] <test tag: end>', str(r))
+        self.assertEqual(
+            '[18.01.2021 18:40:00] <test tag: end>', r.to_str(TAGS))
 
     def test_note(self):
         dt = datetime(year=2021, month=1, day=18, hour=11, minute=11)
         r = Record(dt, note='note')
-        self.assertEqual('[18.01.2021 11:11:00] <no tag> note', str(r))
+        self.assertEqual('[18.01.2021 11:11:00] <no tag> note', r.to_str(TAGS))
 
 
 class TestRecordList(unittest.TestCase):

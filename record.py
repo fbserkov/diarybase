@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import Optional
 
 from datetime_format import dt_to_str
-from tags import TAGS
 
 
 class Record:
@@ -21,15 +20,15 @@ class Record:
     def set_note(self, note):
         self._note = note
 
-    def __str__(self):
+    def to_str(self, tags: dict):
         result = '[' + dt_to_str(self._dt) + ']'
-        result += ' <' + self._tag_id_and_is_active_to_str() + '>'
+        result += ' <' + self._tag_id_and_is_active_to_str(tags) + '>'
         if self._note:
             result += ' ' + self._note
         return result
 
-    def _tag_id_and_is_active_to_str(self):
-        result = TAGS[self._tag_id]
+    def _tag_id_and_is_active_to_str(self, tags: dict):
+        result = tags[self._tag_id]
         if self._is_active is None:
             return result
         if self._is_active:
