@@ -86,10 +86,10 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(1, len(self._record_list))
 
     def test_str(self):
-        dt_1 = datetime(year=2021, month=1, day=16, hour=19, minute=4)
-        self._record_list.append(Record(dt_1, note='first note'))
-        dt_2 = datetime(year=2021, month=1, day=16, hour=19, minute=20)
-        self._record_list.append(Record(dt_2, note='second note'))
+        dt = datetime(year=2021, month=1, day=16, hour=19, minute=4)
+        self._record_list.append(Record(dt, note='first note'))
+        dt = datetime(year=2021, month=1, day=16, hour=19, minute=20)
+        self._record_list.append(Record(dt, note='second note'))
 
         self.assertEqual(
             '[16.01.2021 19:04:00] <no tag> first note\n'
@@ -105,6 +105,47 @@ class TestRecordList(unittest.TestCase):
 
         self.assertEqual(
             5 * '[19.01.2021 19:38:00] <no tag> test\n' + 'last 5 from 10',
+            str(self._record_list),
+        )
+
+    def test_sort_dt(self):
+        dt = datetime(year=2021, month=1, day=23, hour=17, minute=37)
+        self._record_list.append(Record(dt))
+        dt = datetime(year=2021, month=1, day=23, hour=17, minute=36)
+        self._record_list.append(Record(dt))
+
+        self._record_list.sort()
+        self.assertEqual(
+            '[23.01.2021 17:36:00] <no tag>\n'
+            '[23.01.2021 17:37:00] <no tag>',
+            str(self._record_list),
+        )
+
+    def test_sort_is_active(self):
+        dt = datetime(year=2021, month=1, day=23, hour=17, minute=36)
+        self._record_list.append(Record(dt, is_active=True))  # start
+        dt = datetime(
+            year=2021, month=1, day=23, hour=17, minute=36, microsecond=1)
+        self._record_list.append(Record(dt, tag_id=1, is_active=False))  # end
+
+        self._record_list.sort()
+        self.assertEqual(
+            '[23.01.2021 17:36:00] <test tag: end>\n'
+            '[23.01.2021 17:36:00] <no tag: start>',
+            str(self._record_list),
+        )
+
+    def test_sort_is_active_none(self):
+        dt = datetime(year=2021, month=1, day=23, hour=18, minute=6)
+        self._record_list.append(Record(dt, is_active=True))  # start
+        dt = datetime(
+            year=2021, month=1, day=23, hour=18, minute=6, microsecond=1)
+        self._record_list.append(Record(dt, tag_id=1))
+
+        self._record_list.sort()
+        self.assertEqual(
+            '[23.01.2021 18:06:00] <test tag>\n'
+            '[23.01.2021 18:06:00] <no tag: start>',
             str(self._record_list),
         )
 

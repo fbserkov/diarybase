@@ -14,11 +14,17 @@ class Record:
         self._note = note
         self._is_active = is_active
 
-    def get_note(self):
+    def get_dt(self) -> datetime:
+        return self._dt
+
+    def get_note(self) -> Optional[str]:
         return self._note
 
-    def set_note(self, note):
+    def set_note(self, note: str) -> None:
         self._note = note
+
+    def is_active(self) -> Optional[bool]:
+        return self._is_active
 
     def to_str(self, tags: dict):
         result = '[' + dt_to_str(self._dt) + ']'

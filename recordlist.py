@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from database import db
 from record import Record
 
@@ -25,3 +27,20 @@ class RecordList:
     @staticmethod
     def append(r: Record):
         db.get_records().append(r)
+
+    def sort(self):
+        records = db.get_records()
+        records.sort(key=lambda r: (
+            self._round_to_seconds_tenths(r), self._none_is_false(r)))
+
+    @staticmethod
+    def _round_to_seconds_tenths(record):
+        dt = record.get_dt()
+        td = timedelta(microseconds=dt.microsecond % 100000)
+        return dt - td
+
+    @staticmethod
+    def _none_is_false(record):
+        if record.is_active():
+            return True
+        return False
