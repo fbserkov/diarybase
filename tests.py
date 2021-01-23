@@ -14,8 +14,7 @@ TAGS[1] = 'test tag'
 
 class TestTagDict(unittest.TestCase):
     def setUp(self) -> None:
-        db.clear()
-        db.save()
+        db.load()
         self._tag_dict = TagDict()
 
     def test_get_dict(self):
@@ -41,6 +40,10 @@ class TestTagDict(unittest.TestCase):
         db.load()
         td = TagDict()
         self.assertEqual(a_dict, td.get_dict())
+
+    def tearDown(self) -> None:
+        db.clear()
+        db.save()
 
 
 class TestNote(unittest.TestCase):
@@ -75,8 +78,7 @@ class TestNote(unittest.TestCase):
 
 class TestRecordList(unittest.TestCase):
     def setUp(self) -> None:
-        db.clear()
-        db.save()
+        db.load()
         self._record_list = RecordList()
 
     def test_append(self):
@@ -118,11 +120,14 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(
             '[15.01.2021 21:13:00] <no tag> test', str(record_list))
 
+    def tearDown(self) -> None:
+        db.clear()
+        db.save()
+
 
 class TestSpellChecker(unittest.TestCase):
     def setUp(self) -> None:
-        db.clear()
-        db.save()
+        db.load()
         self._sc = SpellChecker()
 
     def test_empty(self):
@@ -140,8 +145,15 @@ class TestSpellChecker(unittest.TestCase):
 
         self._sc.check_note('test', update=True)
         db.save()
+        db.clear()
+
         db.load()
-        self._sc.check_note('test')
+        sc = SpellChecker()
+        sc.check_note('test')
+
+    def tearDown(self) -> None:
+        db.clear()
+        db.save()
 
 
 @unittest.skip
