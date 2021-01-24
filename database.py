@@ -7,8 +7,8 @@ class Database:
         self._filename = os.getenv('DIARYBASE_DBNAME')
         self._data = None
 
-    def __getitem__(self, key: str):
-        return self._data[key]
+    def __getitem__(self, item: str):
+        return self._data[item]
 
     def __setitem__(self, key: str, value):
         self._data[key] = value
