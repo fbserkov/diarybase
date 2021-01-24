@@ -1,13 +1,13 @@
+import os
 import unittest
 from datetime import datetime
-import os
 
 from database import db
 from record import Record
 from recordlist import RecordList
-from spellchecker import SpellChecker
 from tagdict import TagDict
 from tags import TAGS
+from wordset import WordSet
 
 TAGS[0] = 'no tag'
 TAGS[1] = 'test tag'
@@ -193,10 +193,10 @@ class TestRecordList(unittest.TestCase):
         db.save()
 
 
-class TestSpellChecker(unittest.TestCase):
+class TestWordSet(unittest.TestCase):
     def setUp(self) -> None:
         db.load()
-        self._sc = SpellChecker()
+        self._sc = WordSet()
 
     def test_empty(self):
         with self.assertRaises(Exception):
@@ -216,7 +216,7 @@ class TestSpellChecker(unittest.TestCase):
         db.clear()
 
         db.load()
-        sc = SpellChecker()
+        sc = WordSet()
         sc.check_note('test')
 
     def tearDown(self) -> None:

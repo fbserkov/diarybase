@@ -1,7 +1,7 @@
 from datageter import DataGetter
 
 
-class SpellChecker(DataGetter):
+class WordSet(DataGetter):
     def __init__(self):
         DataGetter.__init__(self)
         self._data_type = set
