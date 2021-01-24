@@ -7,14 +7,12 @@ class Database:
         self._filename = os.getenv('DIARYBASE_DBNAME')
         self._data = None
 
-        self._tags = None
         self._records = None
         self._words = None
 
     def clear(self):
         self._data = {}
 
-        self._tags = {}
         self._records = []
         self._words = set()
 
@@ -22,12 +20,12 @@ class Database:
         try:
             with open(self._filename, 'rb') as file:
                 data = pickle.load(file)
-            self._data, self._tags, self._records, self._words = data
+            self._data, self._records, self._words = data
         except FileNotFoundError:
             self.clear()
 
     def save(self):
-        data = self._data, self._tags, self._records, self._words
+        data = self._data, self._records, self._words
         with open(self._filename, 'wb') as file:
             pickle.dump(data, file)
 
