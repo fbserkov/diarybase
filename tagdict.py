@@ -13,3 +13,9 @@ class TagDict(DataGetter):
     def add(self, tag: str):
         tags = self._get_data()
         tags[len(tags)] = tag
+
+    def get_id(self, tag):
+        for _id, _tag in self._get_data().items():
+            if tag == _tag:
+                return _id
+        return 0

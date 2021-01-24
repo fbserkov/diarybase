@@ -2,6 +2,5 @@
 /venv/
 main.db
 reformation.py
-tags.py
 test.db
 usage.py
