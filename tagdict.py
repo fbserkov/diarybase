@@ -2,9 +2,9 @@ from database import db
 
 
 class TagDict:
-    @staticmethod
-    def set_dict(tags: dict):
-        db.set('tags', tags)
+    # @staticmethod
+    # def set_dict(tags: dict):
+    #     db.set('tags', tags)
 
     @staticmethod
     def get_dict() -> dict:

@@ -58,20 +58,15 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(
             {0: 'no tag', 1: 'test tag'}, self._tag_dict.get_dict())
 
-    def test_set_dict(self):
-        a_dict = {1: 'no tag', 2: 'test tag'}
-        self._tag_dict.set_dict(a_dict)
-        self.assertEqual(a_dict, self._tag_dict.get_dict())
-
     def test_db(self):
-        a_dict = {1: 'no tag', 2: 'test tag'}
-        self._tag_dict.set_dict(a_dict)
+        self._tag_dict.add('no tag')
+        self._tag_dict.add('test tag')
         db.save()
         db.clear()
 
         db.load()
         td = TagDict()
-        self.assertEqual(a_dict, td.get_dict())
+        self.assertEqual({0: 'no tag', 1: 'test tag'}, td.get_dict())
 
     def tearDown(self) -> None:
         db.clear()
