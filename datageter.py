@@ -10,7 +10,7 @@ class DataGetter:
         if not (self._data_key and self._data_type):
             raise Exception
         try:
-            return db.get(self._data_key)
+            return db[self._data_key]
         except KeyError:
-            db.set(self._data_key, self._data_type())
-            return db.get(self._data_key)
+            db[self._data_key] = self._data_type()
+            return db[self._data_key]

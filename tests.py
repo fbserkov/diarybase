@@ -24,20 +24,20 @@ class TestDatabase(unittest.TestCase):
     def test_set_and_get(self):
         key = 'key'
         value = 'value'
-        db.set(key, value)
-        self.assertEqual(value, db.get(key))
+        db[key] = value
+        self.assertEqual(value, db[key])
 
-    def test_db(self):
+    def test_save_and_load(self):
         key = 'key'
         value = 'value'
-        db.set(key, value)
+        db[key] = value
         db.save()
         db.clear()
 
         with self.assertRaises(KeyError):
-            value = db.get(key)
+            value = db[key]
         db.load()
-        self.assertEqual(value, db.get(key))
+        self.assertEqual(value, db[key])
 
     def tearDown(self) -> None:
         db.clear()
@@ -58,7 +58,7 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(
             {0: 'no tag', 1: 'test tag'}, self._tag_dict._get_data())
 
-    def test_db(self):
+    def test_save_and_load(self):
         self._tag_dict.add('no tag')
         self._tag_dict.add('test tag')
         db.save()
@@ -176,7 +176,7 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
-    def test_db(self):
+    def test_save_and_load(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
         r = Record(dt, note='test')
         self._record_list.append(r)
@@ -205,7 +205,7 @@ class TestSpellChecker(unittest.TestCase):
     def test_update(self):
         self._sc.check_note('test', update=True)
 
-    def test_db(self):
+    def test_save_and_load(self):
         self._sc.check_note('test', update=True)
         db.load()
         with self.assertRaises(Exception):

@@ -7,6 +7,12 @@ class Database:
         self._filename = os.getenv('DIARYBASE_DBNAME')
         self._data = None
 
+    def __getitem__(self, key: str):
+        return self._data[key]
+
+    def __setitem__(self, key: str, value):
+        self._data[key] = value
+
     def clear(self):
         self._data = {}
 
@@ -20,12 +26,6 @@ class Database:
     def save(self):
         with open(self._filename, 'wb') as file:
             pickle.dump(self._data, file)
-
-    def get(self, key: str):
-        return self._data[key]
-
-    def set(self, key: str, value):
-        self._data[key] = value
 
 
 db: Database = Database()
