@@ -3,12 +3,20 @@ from database import db
 
 class SpellChecker:
     def check_note(self, note: str, update=False):
-        result = self._get_note_set(note) - db.get_words()
+        result = self._get_note_set(note) - self._get_words()
         if result:
             if update:
-                db.get_words().update(result)
+                self._get_words().update(result)
             else:
                 raise Exception(result)
+
+    @staticmethod
+    def _get_words() -> set:
+        try:
+            return db.get('words')
+        except KeyError:
+            db.set('words', set())
+            return db.get('words')
 
     def _get_note_set(self, note):
         result = set()
