@@ -1,22 +1,19 @@
-from database import db
+from datageter import DataGetter
 
 
-class SpellChecker:
+class SpellChecker(DataGetter):
+    def __init__(self):
+        DataGetter.__init__(self)
+        self._data_type = set
+        self._data_key = 'words'
+
     def check_note(self, note: str, update=False):
-        result = self._get_note_set(note) - self._get_words()
+        result = self._get_note_set(note) - self._get_data()
         if result:
             if update:
-                self._get_words().update(result)
+                self._get_data().update(result)
             else:
                 raise Exception(result)
-
-    @staticmethod
-    def _get_words() -> set:
-        try:
-            return db.get('words')
-        except KeyError:
-            db.set('words', set())
-            return db.get('words')
 
     def _get_note_set(self, note):
         result = set()

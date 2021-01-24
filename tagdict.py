@@ -1,19 +1,12 @@
-from database import db
+from datageter import DataGetter
 
 
-class TagDict:
-    # @staticmethod
-    # def set_dict(tags: dict):
-    #     db.set('tags', tags)
-
-    @staticmethod
-    def get_dict() -> dict:
-        try:
-            return db.get('tags')
-        except KeyError:
-            db.set('tags', {})
-            return db.get('tags')
+class TagDict(DataGetter):
+    def __init__(self):
+        DataGetter.__init__(self)
+        self._data_key = 'tags'
+        self._data_type = dict
 
     def add(self, tag: str):
-        tags = self.get_dict()
+        tags = self._get_data()
         tags[len(tags)] = tag
