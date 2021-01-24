@@ -3,8 +3,6 @@ from datetime import timedelta
 from datageter import DataGetter
 from record import Record
 
-from tags import TAGS
-
 
 class RecordList(DataGetter):
     def __init__(self, str_len: int = 500):
@@ -24,7 +22,7 @@ class RecordList(DataGetter):
 
     def __str__(self):
         last_records = self._get_data()[-self._str_len:]
-        result = '\n'.join(record.to_str(TAGS) for record in last_records)
+        result = '\n'.join(str(record) for record in last_records)
         return self._get_len_prompt(result)
 
     def _get_len_prompt(self, result) -> str:
