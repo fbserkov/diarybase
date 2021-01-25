@@ -13,6 +13,10 @@ class TagDict(DataGetter):
         except KeyError:
             return 'KeyError: ' + str(item)
 
+    def __str__(self):
+        items = sorted(self._get_data().items(), key=lambda item: item[1])
+        return '\n'.join(f'{_id}) {tag}' for _id, tag in items)
+
     def add(self, tag: str) -> int:
         if self._tag_is_exist(tag):
             _id = self.get_id(tag)
