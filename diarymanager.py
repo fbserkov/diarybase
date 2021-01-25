@@ -19,7 +19,7 @@ class DiaryManager:
             is_active: Optional[bool] = None, note: str = '',
     ):
         tag_id = self._tag_to_tag_id(tag)
-        self._record_list.append(Record(dt, tag_id, is_active))
+        self._record_list.append(Record(dt, tag_id, is_active, note))
 
     def _tag_to_tag_id(self, tag) -> int:
         return self._tag_dict.get_id(tag)
