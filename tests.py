@@ -55,6 +55,12 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual('no tag', self._tag_dict[0])
         self.assertEqual('test tag', self._tag_dict[1])
 
+    def test_add_the_same(self):
+        self.assertEqual(0, self._tag_dict.add('no tag'))
+        self.assertEqual(0, self._tag_dict.add('no tag'))
+        self.assertEqual('no tag', self._tag_dict[0])
+        self.assertEqual('KeyError: 1', self._tag_dict[1])
+
     def test_get_id(self):
         self.assertEqual(0, self._tag_dict.get_id('no tag'))
         self.assertEqual(0, self._tag_dict.get_id('test tag'))

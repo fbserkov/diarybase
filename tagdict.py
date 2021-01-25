@@ -14,13 +14,20 @@ class TagDict(DataGetter):
             return 'KeyError: ' + str(item)
 
     def add(self, tag: str) -> int:
-        tags = self._get_data()
-        index = len(tags)
-        tags[index] = tag
-        return index
+        if self._tag_is_exist(tag):
+            _id = self.get_id(tag)
+        else:
+            tags = self._get_data()
+            _id = len(tags)
+            tags[_id] = tag
+        return _id
 
     def get_id(self, tag):
         for _id, _tag in self._get_data().items():
             if tag == _tag:
                 return _id
         return 0
+
+    def _tag_is_exist(self, tag) -> bool:
+        tags: dict = self._get_data()
+        return tag in tags.values()
