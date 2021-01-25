@@ -150,13 +150,20 @@ class TestRecordList(unittest.TestCase):
         )
 
     def test_str_len(self):
-        self._record_list = RecordList(str_len=5)
         dt = datetime(year=2021, month=1, day=19, hour=19, minute=38)
         for _ in range(10):
             self._record_list.append(Record(dt, note='test'))
 
+        self._record_list.set_str_len(5)
         self.assertEqual(
-            5 * '[19.01.2021 19:38:00] <no tag> test\n' + 'last 5 from 10',
+            '[19.01.2021 19:38:00] <no tag> test\n' * 5 +
+            'last 5 from 10',
+            str(self._record_list),
+        )
+        self._record_list.set_str_len(50)
+        self.assertEqual(
+            '[19.01.2021 19:38:00] <no tag> test\n' * 9 +
+            '[19.01.2021 19:38:00] <no tag> test',
             str(self._record_list),
         )
 

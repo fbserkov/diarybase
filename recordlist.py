@@ -31,6 +31,9 @@ class RecordList(DataGetter):
             return result + f'\nlast {self._str_len} from {length}'
         return result
 
+    def set_str_len(self, str_len: int):
+        self._str_len = str_len
+
     def append(self, r: Record):
         self._get_data().append(r)
 
