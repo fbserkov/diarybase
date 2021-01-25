@@ -14,7 +14,10 @@ class TagDict(DataGetter):
             return 'KeyError: ' + str(item)
 
     def __str__(self):
-        items = sorted(self._get_data().items(), key=lambda item: item[1])
+        items = sorted(
+            self._get_data().items(),
+            key=lambda item: item[1].lower(),
+        )
         return '\n'.join(f'{_id}) {tag}' for _id, tag in items)
 
     def add(self, tag: str) -> int:

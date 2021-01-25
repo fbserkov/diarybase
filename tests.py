@@ -87,11 +87,11 @@ class TestTagDict(unittest.TestCase):
 
     def test_str(self):
         self._tag_dict.add('tag C')
-        self._tag_dict.add('tag B')
+        self._tag_dict.add('tag b')
         self._tag_dict.add('tag A')
         self.assertEqual(
             '2) tag A\n'
-            '1) tag B\n'
+            '1) tag b\n'
             '0) tag C',
             str(self._tag_dict),
         )
