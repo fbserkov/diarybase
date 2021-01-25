@@ -40,6 +40,10 @@ class RecordList(DataGetter):
     def delete_last_record(self):
         self._get_data().pop()
 
+    def replace_note(self, num_from_end: int, note: str):
+        record = self._get_data()[-num_from_end]
+        record.set_note(note)
+
     def search_in_notes(self, fragment: str):
         records = []
         for record in self._get_data():
