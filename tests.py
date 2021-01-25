@@ -250,6 +250,7 @@ class TestWordSet(unittest.TestCase):
 class TestDiaryManager(unittest.TestCase):
     def setUp(self) -> None:
         db.load()
+        self._tag_dict = TagDict()
         self._diary_manager = DiaryManager()
 
     def test_add_record(self):
@@ -262,6 +263,15 @@ class TestDiaryManager(unittest.TestCase):
         self._diary_manager.add_record(dt)
         self.assertEqual(
             '[21.01.2021 21:15:00] <KeyError: 0>',
+            str(self._diary_manager.get_record_list()),
+        )
+
+    def test_add_record_dt_tag(self):
+        self._tag_dict.add('tag')
+        dt = datetime(year=2021, month=1, day=25, hour=12, minute=37)
+        self._diary_manager.add_record(dt, 'tag')
+        self.assertEqual(
+            '[25.01.2021 12:37:00] <tag>',
             str(self._diary_manager.get_record_list()),
         )
 

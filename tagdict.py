@@ -13,9 +13,11 @@ class TagDict(DataGetter):
         except KeyError:
             return 'KeyError: ' + str(item)
 
-    def add(self, tag: str):
+    def add(self, tag: str) -> int:
         tags = self._get_data()
-        tags[len(tags)] = tag
+        index = len(tags)
+        tags[index] = tag
+        return index
 
     def get_id(self, tag):
         for _id, _tag in self._get_data().items():
