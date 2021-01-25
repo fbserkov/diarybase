@@ -268,12 +268,24 @@ class TestDiaryManager(unittest.TestCase):
             str(self._diary_manager.get_record_list()),
         )
 
-    def test_add_record_dt_tag(self):
+    def test_add_record_tag(self):
         self._tag_dict.add('tag')
         dt = datetime(year=2021, month=1, day=25, hour=12, minute=37)
         self._diary_manager.add_record(dt, 'tag')
         self.assertEqual(
             '[25.01.2021 12:37:00] <tag>',
+            str(self._diary_manager.get_record_list()),
+        )
+
+    def test_add_record_is_active(self):
+        self._tag_dict.add('tag')
+        dt = datetime(year=2021, month=1, day=25, hour=15, minute=34)
+        self._diary_manager.add_record(dt, 'tag', is_active=True)
+        dt = datetime(year=2021, month=1, day=25, hour=15, minute=37)
+        self._diary_manager.add_record(dt, 'tag', is_active=False)
+        self.assertEqual(
+            '[25.01.2021 15:34:00] <tag: start>\n'
+            '[25.01.2021 15:37:00] <tag: end>',
             str(self._diary_manager.get_record_list()),
         )
 
