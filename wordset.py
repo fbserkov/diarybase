@@ -4,14 +4,15 @@ from datageter import DataGetter
 class WordSet(DataGetter):
     def __init__(self):
         DataGetter.__init__(self)
-        self._data_type = set
         self._data_key = 'words'
+        self._data_type = set
 
     def check_note(self, note: str, update=False):
-        result = self._get_note_set(note) - self._get_data()
+        words: set = self._get_data()
+        result = self._get_note_set(note) - words
         if result:
             if update:
-                self._get_data().update(result)
+                words.update(result)
             else:
                 raise Exception(result)
 
