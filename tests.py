@@ -61,6 +61,22 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual('no tag', self._tag_dict[0])
         self.assertEqual('KeyError: 1', self._tag_dict[1])
 
+    def test_delete(self):
+        self.assertEqual(0, self._tag_dict.add('no tag'))
+        self.assertEqual(1, self._tag_dict.add('test tag'))
+
+        self.assertEqual('test tag', self._tag_dict[1])
+        self._tag_dict.delete('test tag')
+        self.assertEqual('KeyError: 1', self._tag_dict[1])
+
+    def test_add_after_delete(self):
+        self.assertEqual(0, self._tag_dict.add('no tag'))
+        self.assertEqual(1, self._tag_dict.add('first tag'))
+        self.assertEqual(2, self._tag_dict.add('second tag'))
+
+        self._tag_dict.delete('first tag')
+        self.assertEqual(1, self._tag_dict.add('third tag'))
+
     def test_get_id(self):
         self.assertEqual(0, self._tag_dict.get_id('no tag'))
         self.assertEqual(0, self._tag_dict.get_id('test tag'))
