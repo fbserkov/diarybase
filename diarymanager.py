@@ -4,11 +4,13 @@ from typing import Optional
 from record import Record
 from recordlist import RecordList
 from tagdict import TagDict
+from wordset import WordSet
 
 
 class DiaryManager:
     def __init__(self):
         self._tag_dict = TagDict()
+        self._word_set = WordSet()
         self._record_list = RecordList()
 
     def get_record_list(self):
@@ -17,8 +19,10 @@ class DiaryManager:
     def add_record(
             self, dt: Optional[datetime] = None, tag: str = '',
             is_active: Optional[bool] = None, note: str = '',
+            update: bool = False,
     ):
         tag_id = self._tag_to_tag_id(tag)
+        self._word_set.check_note(note, update)
         self._record_list.append(Record(dt, tag_id, is_active, note))
 
     def _tag_to_tag_id(self, tag) -> int:

@@ -292,7 +292,11 @@ class TestDiaryManager(unittest.TestCase):
     def test_add_record_note(self):
         self._tag_dict.add('tag')
         dt = datetime(year=2021, month=1, day=25, hour=12, minute=39)
-        self._diary_manager.add_record(dt, 'tag', note='test note')
+        with self.assertRaises(Exception):
+            self._diary_manager.add_record(dt, 'tag', note='test note')
+
+        self._diary_manager.add_record(
+            dt, 'tag', note='test note', update=True)
         self.assertEqual(
             '[25.01.2021 12:39:00] <tag> test note',
             str(self._diary_manager.get_record_list()),
