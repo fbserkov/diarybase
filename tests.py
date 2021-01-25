@@ -219,22 +219,22 @@ class TestRecordList(unittest.TestCase):
 class TestWordSet(unittest.TestCase):
     def setUp(self) -> None:
         db.load()
-        self._sc = WordSet()
+        self._word_set = WordSet()
 
     def test_check_note(self):
         with self.assertRaises(Exception):
-            self._sc.check_note('test')
+            self._word_set.check_note('test')
 
     def test_check_note_update(self):
-        self._sc.check_note('test', update=True)
+        self._word_set.check_note('test', update=True)
 
     def test_save_and_load(self):
-        self._sc.check_note('test', update=True)
+        self._word_set.check_note('test', update=True)
         db.load()
         with self.assertRaises(Exception):
-            self._sc.check_note('test')
+            self._word_set.check_note('test')
 
-        self._sc.check_note('test', update=True)
+        self._word_set.check_note('test', update=True)
         db.save()
         db.clear()
 
@@ -248,11 +248,26 @@ class TestWordSet(unittest.TestCase):
 
 
 class TestDiaryManager(unittest.TestCase):
+    def setUp(self) -> None:
+        db.load()
+        self._diary_manager = DiaryManager()
+
     def test_add_record(self):
-        rm = DiaryManager()
-        # dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
-        rm.add_record()
-        self.assertEqual('<KeyError: 0>', str(rm.get_record_list())[22:])
+        self._diary_manager.add_record()
+        self.assertEqual(
+            '<KeyError: 0>', str(self._diary_manager.get_record_list())[22:])
+
+    def test_add_record_dt(self):
+        dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
+        self._diary_manager.add_record(dt)
+        self.assertEqual(
+            '[21.01.2021 21:15:00] <KeyError: 0>',
+            str(self._diary_manager.get_record_list()),
+        )
+
+    def tearDown(self) -> None:
+        db.clear()
+        db.save()
 
 
 if __name__ == '__main__':
