@@ -34,6 +34,9 @@ class RecordList(DataGetter):
     def append(self, r: Record):
         self._get_data().append(r)
 
+    def delete_last_record(self):
+        self._get_data().pop()
+
     def sort(self):
         records = self._get_data()
         records.sort(key=lambda r: (

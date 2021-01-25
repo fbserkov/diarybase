@@ -9,12 +9,9 @@ from wordset import WordSet
 
 class DiaryManager:
     def __init__(self):
-        self._tag_dict = TagDict()
-        self._word_set = WordSet()
-        self._record_list = RecordList()
-
-    def get_record_list(self):
-        return self._record_list
+        self.tag_dict = TagDict()
+        self.word_set = WordSet()
+        self.record_list = RecordList()
 
     def add_record(
             self, dt: Optional[datetime] = None, tag: str = '',
@@ -22,8 +19,8 @@ class DiaryManager:
             update: bool = False,
     ):
         tag_id = self._tag_to_tag_id(tag)
-        self._word_set.check_note(note, update)
-        self._record_list.append(Record(dt, tag_id, is_active, note))
+        self.word_set.check_note(note, update)
+        self.record_list.append(Record(dt, tag_id, is_active, note))
 
     def _tag_to_tag_id(self, tag) -> int:
-        return self._tag_dict.get_id(tag)
+        return self.tag_dict.get_id(tag)

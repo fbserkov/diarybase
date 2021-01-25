@@ -160,6 +160,23 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
+    def test_delete_last_record(self):
+        dt = datetime(year=2021, month=1, day=25, hour=16, minute=21)
+        self._record_list.append(Record(dt, note='first'))
+        dt = datetime(year=2021, month=1, day=25, hour=16, minute=23)
+        self._record_list.append(Record(dt, note='second'))
+
+        self.assertEqual(
+            '[25.01.2021 16:21:00] <no tag> first\n'
+            '[25.01.2021 16:23:00] <no tag> second',
+            str(self._record_list),
+        )
+        self._record_list.delete_last_record()
+        self.assertEqual(
+            '[25.01.2021 16:21:00] <no tag> first',
+            str(self._record_list),
+        )
+
     def test_sort_dt(self):
         dt = datetime(year=2021, month=1, day=23, hour=17, minute=37)
         self._record_list.append(Record(dt))
@@ -258,14 +275,14 @@ class TestDiaryManager(unittest.TestCase):
     def test_add_record(self):
         self._diary_manager.add_record()
         self.assertEqual(
-            '<KeyError: 0>', str(self._diary_manager.get_record_list())[22:])
+            '<KeyError: 0>', str(self._diary_manager.record_list)[22:])
 
     def test_add_record_dt(self):
         dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
         self._diary_manager.add_record(dt)
         self.assertEqual(
             '[21.01.2021 21:15:00] <KeyError: 0>',
-            str(self._diary_manager.get_record_list()),
+            str(self._diary_manager.record_list),
         )
 
     def test_add_record_tag(self):
@@ -274,7 +291,7 @@ class TestDiaryManager(unittest.TestCase):
         self._diary_manager.add_record(dt, 'tag')
         self.assertEqual(
             '[25.01.2021 12:37:00] <tag>',
-            str(self._diary_manager.get_record_list()),
+            str(self._diary_manager.record_list),
         )
 
     def test_add_record_is_active(self):
@@ -286,7 +303,7 @@ class TestDiaryManager(unittest.TestCase):
         self.assertEqual(
             '[25.01.2021 15:34:00] <tag: start>\n'
             '[25.01.2021 15:37:00] <tag: end>',
-            str(self._diary_manager.get_record_list()),
+            str(self._diary_manager.record_list),
         )
 
     def test_add_record_note(self):
@@ -299,7 +316,7 @@ class TestDiaryManager(unittest.TestCase):
             dt, 'tag', note='test note', update=True)
         self.assertEqual(
             '[25.01.2021 12:39:00] <tag> test note',
-            str(self._diary_manager.get_record_list()),
+            str(self._diary_manager.record_list),
         )
 
     def tearDown(self) -> None:
