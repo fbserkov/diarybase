@@ -225,6 +225,34 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
+    def test_search_in_notes(self):
+        dt = datetime(year=2021, month=1, day=25, hour=19, minute=32)
+        self._record_list.append(Record(dt, note='ABC'))
+        self._record_list.append(Record(dt, note='BCD'))
+        self._record_list.append(Record(dt, note='CDA'))
+
+        self.assertEqual(
+            '[25.01.2021 19:32:00] <no tag> ABC\n'
+            '[25.01.2021 19:32:00] <no tag> CDA',
+            self._record_list.search_in_notes('A'),
+        )
+        self.assertEqual(
+            '[25.01.2021 19:32:00] <no tag> ABC\n'
+            '[25.01.2021 19:32:00] <no tag> BCD',
+            self._record_list.search_in_notes('B'),
+        )
+        self.assertEqual(
+            '[25.01.2021 19:32:00] <no tag> ABC\n'
+            '[25.01.2021 19:32:00] <no tag> BCD\n'
+            '[25.01.2021 19:32:00] <no tag> CDA',
+            self._record_list.search_in_notes('C'),
+        )
+        self.assertEqual(
+            '[25.01.2021 19:32:00] <no tag> BCD\n'
+            '[25.01.2021 19:32:00] <no tag> CDA',
+            self._record_list.search_in_notes('D'),
+        )
+
     def test_save_and_load(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
         r = Record(dt, note='test')

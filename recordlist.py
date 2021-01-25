@@ -40,6 +40,14 @@ class RecordList(DataGetter):
     def delete_last_record(self):
         self._get_data().pop()
 
+    def search_in_notes(self, fragment: str):
+        records = []
+        for record in self._get_data():
+            note = record.get_note()
+            if note and fragment in note:
+                records.append(record)
+        return '\n'.join(str(r) for r in records)
+
     def sort(self):
         records = self._get_data()
         records.sort(key=lambda r: (
