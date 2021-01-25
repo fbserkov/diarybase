@@ -3,6 +3,7 @@ import unittest
 from datetime import datetime
 
 from database import db
+from diarymanager import DiaryManager
 from record import Record
 from recordlist import RecordList
 from tagdict import TagDict
@@ -45,12 +46,19 @@ class TestTagDict(unittest.TestCase):
         db.load()
         self._tag_dict = TagDict()
 
-    def test_get_dict(self):
+    def test_get_data(self):
         self.assertEqual({}, self._tag_dict._get_data())
+
+    def test_getitem(self):
+        self.assertEqual('KeyError: 0', self._tag_dict[0])
+        self.assertEqual('KeyError: 1', self._tag_dict[1])
 
     def test_add(self):
         self._tag_dict.add('no tag')
         self._tag_dict.add('test tag')
+
+        self.assertEqual('no tag', self._tag_dict[0])
+        self.assertEqual('test tag', self._tag_dict[1])
         self.assertEqual(
             {0: 'no tag', 1: 'test tag'}, self._tag_dict._get_data())
 
@@ -213,11 +221,11 @@ class TestWordSet(unittest.TestCase):
         db.load()
         self._sc = WordSet()
 
-    def test_empty(self):
+    def test_check_note(self):
         with self.assertRaises(Exception):
             self._sc.check_note('test')
 
-    def test_update(self):
+    def test_check_note_update(self):
         self._sc.check_note('test', update=True)
 
     def test_save_and_load(self):
@@ -239,14 +247,12 @@ class TestWordSet(unittest.TestCase):
         db.save()
 
 
-@unittest.skip
-class TestRecordManager(unittest.TestCase):
-    def test_add(self):
-        rm = RecordManager()
-        dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
-        rm.add_record(dt, tag='tag', note='note')
-        self.assertEqual(
-            '[21.01.2021 21:15:00] <tag> note\n', str(rm.get_record_list()))
+class TestDiaryManager(unittest.TestCase):
+    def test_add_record(self):
+        rm = DiaryManager()
+        # dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
+        rm.add_record()
+        self.assertEqual('<KeyError: 0>', str(rm.get_record_list())[22:])
 
 
 if __name__ == '__main__':

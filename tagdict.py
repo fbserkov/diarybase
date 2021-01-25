@@ -8,7 +8,10 @@ class TagDict(DataGetter):
         self._data_type = dict
 
     def __getitem__(self, item):
-        return self._get_data()[item]
+        try:
+            return self._get_data()[item]
+        except KeyError:
+            return 'KeyError: ' + str(item)
 
     def add(self, tag: str):
         tags = self._get_data()
