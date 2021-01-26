@@ -85,6 +85,22 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(0, self._tag_dict.get_id('no tag'))
         self.assertEqual(1, self._tag_dict.get_id('test tag'))
 
+    def test_set_id(self):
+        self._tag_dict.set_id(10, 'first tag')  # not used, not exist
+        self.assertEqual('first tag', self._tag_dict[10])
+
+        self._tag_dict.set_id(20, 'first tag')  # not used, tag is exist
+        self.assertEqual('KeyError: 10', self._tag_dict[10])
+        self.assertEqual('first tag', self._tag_dict[20])
+
+        self._tag_dict.set_id(20, 'second tag')  # id is used, not exist
+        self.assertEqual('second tag', self._tag_dict[20])
+        self.assertEqual('first tag', self._tag_dict[0])
+
+        self._tag_dict.set_id(20, 'first tag')  # id is used, tag is exist
+        self.assertEqual('first tag', self._tag_dict[20])
+        self.assertEqual('second tag', self._tag_dict[0])
+
     def test_rename(self):
         self.assertEqual(0, self._tag_dict.add('no tag'))
         self._tag_dict.rename('no tag', 'No tag!')
