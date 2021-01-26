@@ -78,12 +78,17 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(1, self._tag_dict.add('third tag'))
 
     def test_get_id(self):
-        self.assertEqual(0, self._tag_dict.get_id('no tag'))
-        self.assertEqual(0, self._tag_dict.get_id('test tag'))
+        self.assertEqual(-1, self._tag_dict.get_id('no tag'))
+        self.assertEqual(-1, self._tag_dict.get_id('test tag'))
         self.assertEqual(0, self._tag_dict.add('no tag'))
         self.assertEqual(1, self._tag_dict.add('test tag'))
         self.assertEqual(0, self._tag_dict.get_id('no tag'))
         self.assertEqual(1, self._tag_dict.get_id('test tag'))
+
+    def test_rename(self):
+        self.assertEqual(0, self._tag_dict.add('no tag'))
+        self._tag_dict.rename('no tag', 'No tag!')
+        self.assertEqual(0, self._tag_dict.get_id('No tag!'))
 
     def test_str(self):
         self._tag_dict.add('tag C')
@@ -364,13 +369,13 @@ class TestDiaryManager(unittest.TestCase):
     def test_add_record(self):
         self._diary_manager.add_record()
         self.assertEqual(
-            '<KeyError: 0>', str(self._diary_manager.record_list)[22:])
+            '<KeyError: -1>', str(self._diary_manager.record_list)[22:])
 
     def test_add_record_dt(self):
         dt = datetime(year=2021, month=1, day=21, hour=21, minute=15)
         self._diary_manager.add_record(dt)
         self.assertEqual(
-            '[21.01.2021 21:15:00] <KeyError: 0>',
+            '[21.01.2021 21:15:00] <KeyError: -1>',
             str(self._diary_manager.record_list),
         )
 
@@ -413,7 +418,7 @@ class TestDiaryManager(unittest.TestCase):
         self._diary_manager.add_record(dt, note='first', update=True)
 
         self.assertEqual(
-            '[25.01.2021 19:57:00] <KeyError: 0> first',
+            '[25.01.2021 19:57:00] <KeyError: -1> first',
             str(self._diary_manager.record_list),
         )
         with self.assertRaises(Exception):
@@ -422,7 +427,7 @@ class TestDiaryManager(unittest.TestCase):
         self._diary_manager.replace_note(
             num_from_end=1, note='second', update=True)
         self.assertEqual(
-            '[25.01.2021 19:57:00] <KeyError: 0> second',
+            '[25.01.2021 19:57:00] <KeyError: -1> second',
             str(self._diary_manager.record_list),
         )
 

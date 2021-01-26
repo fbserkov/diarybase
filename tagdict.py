@@ -21,33 +21,34 @@ class TagDict(DataGetter):
         return '\n'.join(f'{_id}) {tag}' for _id, tag in items)
 
     def add(self, tag: str) -> int:
-        if self._tag_is_exist(tag):
-            _id = self.get_id(tag)
-        else:
+        _id = self.get_id(tag)
+        if _id == -1:
             _id = self._get_next_id()
             self._get_data()[_id] = tag
         return _id
 
-    def delete(self, tag: str) -> None:
-        if not self._tag_is_exist(tag):
-            return
-        tags: dict = self._get_data()
-        tags.pop(self.get_id(tag))
+    def rename(self, old, new):
+        _id = self.get_id(old)
+        if _id != -1:
+            tags: dict = self._get_data()
+            tags[_id] = new
 
-    def _tag_is_exist(self, tag) -> bool:
-        tags: dict = self._get_data()
-        return tag in tags.values()
+    def delete(self, tag: str) -> None:
+        _id = self.get_id(tag)
+        if _id != -1:
+            tags: dict = self._get_data()
+            tags.pop(_id)
 
     def get_id(self, tag):
         for _id, _tag in self._get_data().items():
             if tag == _tag:
                 return _id
-        return 0
+        return -1
 
     def _get_next_id(self):
         tags: dict = self._get_data()
-        count = -1
+        count = 0
         while True:
-            count += 1
             if count not in tags:
                 return count
+            count += 1
