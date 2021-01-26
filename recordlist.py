@@ -44,6 +44,13 @@ class RecordList(DataGetter):
         record = self._get_data()[-num_from_end]
         record.set_note(note)
 
+    def swap_tag_id(self, id_1, id_2):
+        for record in self._get_data():
+            if record.get_tag_id() == id_1:
+                record.set_tag_id(id_2)
+            elif record.get_tag_id() == id_2:
+                record.set_tag_id(id_1)
+
     def search_in_notes(self, fragment: str):
         records = []
         for record in self._get_data():

@@ -35,6 +35,12 @@ class Record:
     def get_dt(self) -> datetime:
         return self._dt
 
+    def get_tag_id(self) -> int:
+        return self._tag_id
+
+    def set_tag_id(self, _id: int) -> None:
+        self._tag_id = _id
+
     def get_note(self) -> Optional[str]:
         return self._note
 

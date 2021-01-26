@@ -136,7 +136,7 @@ class TestTagDict(unittest.TestCase):
         db.save()
 
 
-class TestNote(unittest.TestCase):
+class TestRecord(unittest.TestCase):
     def setUp(self) -> None:
         db.load()
         td = TagDict()
@@ -150,12 +150,16 @@ class TestNote(unittest.TestCase):
     def test_dt(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
         r = Record(dt)
+        self.assertEqual(dt, r.get_dt())
         self.assertEqual('[18.01.2021 18:26:00] <no tag>', str(r))
 
     def test_tag_id(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
         r = Record(dt, tag_id=1)
+        self.assertEqual(1, r.get_tag_id())
         self.assertEqual('[18.01.2021 18:40:00] <test tag>', str(r))
+        r.set_tag_id(0)
+        self.assertEqual('[18.01.2021 18:40:00] <no tag>', str(r))
 
     def test_is_active(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=40)
@@ -169,7 +173,10 @@ class TestNote(unittest.TestCase):
     def test_note(self):
         dt = datetime(year=2021, month=1, day=18, hour=11, minute=11)
         r = Record(dt, note='test')
+        self.assertEqual('test', r.get_note())
         self.assertEqual('[18.01.2021 11:11:00] <no tag> test', str(r))
+        r.set_note('Test!')
+        self.assertEqual('[18.01.2021 11:11:00] <no tag> Test!', str(r))
 
     def tearDown(self) -> None:
         db.clear()
@@ -256,6 +263,24 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(
             '[25.01.2021 19:47:00] <no tag> First!\n'
             '[25.01.2021 19:47:00] <no tag> Second!',
+            str(self._record_list),
+        )
+
+    def test_swap_tag_id(self):
+        dt = datetime(year=2021, month=1, day=26, hour=21, minute=42)
+        self._record_list.append(Record(dt, note='first'))
+        dt = datetime(year=2021, month=1, day=26, hour=21, minute=43)
+        self._record_list.append(Record(dt, tag_id=1, note='second'))
+
+        self.assertEqual(
+            '[26.01.2021 21:42:00] <no tag> first\n'
+            '[26.01.2021 21:43:00] <test tag> second',
+            str(self._record_list),
+        )
+        self._record_list.swap_tag_id(0, 1)
+        self.assertEqual(
+            '[26.01.2021 21:42:00] <test tag> first\n'
+            '[26.01.2021 21:43:00] <no tag> second',
             str(self._record_list),
         )
 
