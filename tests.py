@@ -371,6 +371,30 @@ class TestRecordList(unittest.TestCase):
             self._record_list.filter_record(fragment='D'),
         )
 
+    def test_tag_id_and_note_filter(self):
+        dt = datetime(year=2021, month=1, day=27, hour=20, minute=53)
+        self._record_list.append(Record(dt, note='note A'))
+        self._record_list.append(Record(dt, note='note B'))
+        self._record_list.append(Record(dt, tag_id=1, note='note A'))
+        self._record_list.append(Record(dt, tag_id=1, note='note B'))
+
+        self.assertEqual(
+            '[27.01.2021 20:53:00] <no tag> note A',
+            self._record_list.filter_record(tag_id=0, fragment='A'),
+        )
+        self.assertEqual(
+            '[27.01.2021 20:53:00] <no tag> note B',
+            self._record_list.filter_record(tag_id=0, fragment='B'),
+        )
+        self.assertEqual(
+            '[27.01.2021 20:53:00] <test tag> note A',
+            self._record_list.filter_record(tag_id=1, fragment='A'),
+        )
+        self.assertEqual(
+            '[27.01.2021 20:53:00] <test tag> note B',
+            self._record_list.filter_record(tag_id=1, fragment='B'),
+        )
+
     def test_save_and_load(self):
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
         r = Record(dt, note='test')

@@ -63,10 +63,15 @@ class RecordList(DataGetter):
     @staticmethod
     def _is_filtered(r: Record, **kwargs) -> bool:
         if 'tag_id' in kwargs:
-            return r.get_tag_id() == kwargs['tag_id']
+            if r.get_tag_id() != kwargs['tag_id']:
+                return False
         if 'fragment' in kwargs:
             note = r.get_note()
-            return note and kwargs['fragment'] in note
+            if not note:
+                return False
+            if kwargs['fragment'] not in note:
+                return False
+        return True
 
     def sort(self):
         records = self._get_data()
