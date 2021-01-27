@@ -490,6 +490,30 @@ class TestDiaryManager(unittest.TestCase):
             str(self._diary_manager.record_list),
         )
 
+    def test_tag_filter(self):
+        self._tag_dict.add('first tag')
+        self._tag_dict.add('second tag')
+        dt = datetime(year=2021, month=1, day=27, hour=12, minute=52)
+        self._diary_manager.add_record(
+            dt, 'first tag', note='first note', update=True)
+        self._diary_manager.add_record(
+            dt, 'second tag', note='second note', update=True)
+        self._diary_manager.add_record(
+            dt, 'first tag', note='third note', update=True)
+        self._diary_manager.add_record(
+            dt, 'second tag', note='fourth note', update=True)
+
+        self.assertEqual(
+            '[27.01.2021 12:52:00] <first tag> first note\n'
+            '[27.01.2021 12:52:00] <first tag> third note',
+            self._diary_manager.tag_filter('first tag'),
+        )
+        self.assertEqual(
+            '[27.01.2021 12:52:00] <second tag> second note\n'
+            '[27.01.2021 12:52:00] <second tag> fourth note',
+            self._diary_manager.tag_filter('second tag'),
+        )
+
     def tearDown(self) -> None:
         db.clear()
         db.save()

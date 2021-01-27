@@ -28,3 +28,7 @@ class DiaryManager:
     def replace_note(self, num_from_end: int, note: str, update=False):
         self.word_set.check_note(note, update)
         self.record_list.replace_note(num_from_end, note)
+
+    def tag_filter(self, tag: str):
+        tag_id = self.tag_dict.get_id(tag)
+        return self.record_list.tag_id_filter(tag_id)
