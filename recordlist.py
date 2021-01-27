@@ -51,7 +51,7 @@ class RecordList(DataGetter):
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
 
-    def search_in_notes(self, fragment: str):
+    def note_filter(self, fragment: str):
         records = []
         for record in self._get_data():
             note = record.get_note()

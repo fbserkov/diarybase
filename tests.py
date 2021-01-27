@@ -325,7 +325,7 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
-    def test_search_in_notes(self):
+    def test_note_filter(self):
         dt = datetime(year=2021, month=1, day=25, hour=19, minute=32)
         self._record_list.append(Record(dt, note='ABC'))
         self._record_list.append(Record(dt, note='BCD'))
@@ -334,23 +334,23 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.search_in_notes('A'),
+            self._record_list.note_filter('A'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> BCD',
-            self._record_list.search_in_notes('B'),
+            self._record_list.note_filter('B'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> BCD\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.search_in_notes('C'),
+            self._record_list.note_filter('C'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> BCD\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.search_in_notes('D'),
+            self._record_list.note_filter('D'),
         )
 
     def test_save_and_load(self):
