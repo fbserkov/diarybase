@@ -335,12 +335,12 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(
             '[27.01.2021 12:40:00] <no tag> first\n'
             '[27.01.2021 12:40:00] <no tag> third',
-            self._record_list.tag_id_filter(0),
+            self._record_list.filter_record(tag_id=0),
         )
         self.assertEqual(
             '[27.01.2021 12:40:00] <test tag> second\n'
             '[27.01.2021 12:40:00] <test tag> fourth',
-            self._record_list.tag_id_filter(1),
+            self._record_list.filter_record(tag_id=1),
         )
 
     def test_note_filter(self):
@@ -352,23 +352,23 @@ class TestRecordList(unittest.TestCase):
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.note_filter('A'),
+            self._record_list.filter_record(fragment='A'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> BCD',
-            self._record_list.note_filter('B'),
+            self._record_list.filter_record(fragment='B'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> ABC\n'
             '[25.01.2021 19:32:00] <no tag> BCD\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.note_filter('C'),
+            self._record_list.filter_record(fragment='C'),
         )
         self.assertEqual(
             '[25.01.2021 19:32:00] <no tag> BCD\n'
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.note_filter('D'),
+            self._record_list.filter_record(fragment='D'),
         )
 
     def test_save_and_load(self):

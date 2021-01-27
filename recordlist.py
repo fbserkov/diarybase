@@ -51,24 +51,22 @@ class RecordList(DataGetter):
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
 
-    def tag_id_filter(self, tag_id: int):
-        records = self._tag_id_filter(tag_id)
+    def filter_record(self, **kwargs) -> str:
+        records = self._filter(**kwargs)
         return '\n'.join(str(r) for r in records)
 
-    def _tag_id_filter(self, tag_id: int):
+    def _filter(self, **kwargs):
         for record in self._get_data():
-            if record.get_tag_id() == tag_id:
+            if self._is_filtered(record, **kwargs):
                 yield record
 
-    def note_filter(self, fragment: str) -> str:
-        records = self._note_filter(fragment)
-        return '\n'.join(str(r) for r in records)
-
-    def _note_filter(self, fragment: str):
-        for record in self._get_data():
-            note = record.get_note()
-            if note and fragment in note:
-                yield record
+    @staticmethod
+    def _is_filtered(r: Record, **kwargs) -> bool:
+        if 'tag_id' in kwargs:
+            return r.get_tag_id() == kwargs['tag_id']
+        if 'fragment' in kwargs:
+            note = r.get_note()
+            return note and kwargs['fragment'] in note
 
     def sort(self):
         records = self._get_data()
