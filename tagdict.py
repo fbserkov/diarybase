@@ -39,17 +39,18 @@ class TagDict(DataGetter):
             tags: dict = self._get_data()
             tags.pop(_id)
 
-    def set_id(self, new_id: int, tag: str) -> None:
+    def set_id(self, new_id: int, tag: str) -> int:
         tags: dict = self._get_data()
         old_id = self.get_id(tag)
         if old_id == -1:
-            self.add(tag)
+            old_id = self.add(tag)
             self.set_id(new_id, tag)
         elif new_id in tags:
             tags[new_id], tags[old_id] = tag, tags[new_id]
         else:
             self.delete(tag)
             tags[new_id] = tag
+        return old_id
 
     def get_id(self, tag: str) -> int:
         for _id, _tag in self._get_data().items():

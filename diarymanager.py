@@ -29,5 +29,9 @@ class DiaryManager:
         self.word_set.check_note(note, update)
         self.record_list.replace_note(num_from_end, note)
 
+    def set_tag_id(self, new_id: int, tag: str):
+        old_id = self.tag_dict.set_id(new_id, tag)
+        self.record_list.swap_tag_id(old_id, new_id)
+
     def tag_filter(self, tag: str):
         return self.record_list.filter_record(tag_id=self.tag_dict.get_id(tag))

@@ -86,18 +86,22 @@ class TestTagDict(unittest.TestCase):
         self.assertEqual(1, self._tag_dict.get_id('test tag'))
 
     def test_set_id(self):
-        self._tag_dict.set_id(10, 'first tag')  # not used, not exist
+        # id isn't used, tag isn't exist
+        self.assertEqual(0, self._tag_dict.set_id(10, 'first tag'))
         self.assertEqual('first tag', self._tag_dict[10])
 
-        self._tag_dict.set_id(20, 'first tag')  # not used, tag is exist
+        # id isn't used, tag is exist
+        self.assertEqual(10, self._tag_dict.set_id(20, 'first tag'))
         self.assertEqual('KeyError: 10', self._tag_dict[10])
         self.assertEqual('first tag', self._tag_dict[20])
 
-        self._tag_dict.set_id(20, 'second tag')  # id is used, not exist
+        # id is used, tag isn't exist
+        self.assertEqual(0, self._tag_dict.set_id(20, 'second tag'))
         self.assertEqual('second tag', self._tag_dict[20])
         self.assertEqual('first tag', self._tag_dict[0])
 
-        self._tag_dict.set_id(20, 'first tag')  # id is used, tag is exist
+        # id is used, tag is exist
+        self.assertEqual(0, self._tag_dict.set_id(20, 'first tag'))
         self.assertEqual('first tag', self._tag_dict[20])
         self.assertEqual('second tag', self._tag_dict[0])
 
@@ -511,6 +515,51 @@ class TestDiaryManager(unittest.TestCase):
             num_from_end=1, note='second', update=True)
         self.assertEqual(
             '[25.01.2021 19:57:00] <KeyError: -1> second',
+            str(self._diary_manager.record_list),
+        )
+
+    def test_set_tag_id(self):
+        dt = datetime(year=2021, month=1, day=27, hour=21, minute=15)
+        self._tag_dict.add('tag B')
+        self._diary_manager.add_record(
+            dt, tag='tag B', note='note B', update=True)
+        self._tag_dict.add('tag A')
+        self._diary_manager.add_record(
+            dt, tag='tag A', note='note A', update=True)
+
+        self.assertEqual(
+            '1) tag A\n'
+            '0) tag B',
+            str(self._diary_manager.tag_dict),
+        )
+        self._diary_manager.set_tag_id(0, 'tag A')
+        self.assertEqual(
+            '0) tag A\n'
+            '1) tag B',
+            str(self._diary_manager.tag_dict),
+        )
+        self._diary_manager.set_tag_id(3, 'tag A')
+        self.assertEqual(
+            '3) tag A\n'
+            '1) tag B',
+            str(self._diary_manager.tag_dict),
+        )
+        self._diary_manager.set_tag_id(3, 'tag B')
+        self.assertEqual(
+            '1) tag A\n'
+            '3) tag B',
+            str(self._diary_manager.tag_dict),
+        )
+        self._diary_manager.set_tag_id(2, 'tag B')
+        self.assertEqual(
+            '1) tag A\n'
+            '2) tag B',
+            str(self._diary_manager.tag_dict),
+        )
+
+        self.assertEqual(
+            '[27.01.2021 21:15:00] <tag B> note B\n'
+            '[27.01.2021 21:15:00] <tag A> note A',
             str(self._diary_manager.record_list),
         )
 
