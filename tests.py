@@ -325,6 +325,24 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
+    def test_tag_id_filter(self):
+        dt = datetime(year=2021, month=1, day=27, hour=12, minute=40)
+        self._record_list.append(Record(dt, note='first'))
+        self._record_list.append(Record(dt, tag_id=1, note='second'))
+        self._record_list.append(Record(dt, note='third'))
+        self._record_list.append(Record(dt, tag_id=1, note='fourth'))
+
+        self.assertEqual(
+            '[27.01.2021 12:40:00] <no tag> first\n'
+            '[27.01.2021 12:40:00] <no tag> third',
+            self._record_list.tag_id_filter(0),
+        )
+        self.assertEqual(
+            '[27.01.2021 12:40:00] <test tag> second\n'
+            '[27.01.2021 12:40:00] <test tag> fourth',
+            self._record_list.tag_id_filter(1),
+        )
+
     def test_note_filter(self):
         dt = datetime(year=2021, month=1, day=25, hour=19, minute=32)
         self._record_list.append(Record(dt, note='ABC'))

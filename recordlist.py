@@ -51,13 +51,24 @@ class RecordList(DataGetter):
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
 
-    def note_filter(self, fragment: str):
-        records = []
+    def tag_id_filter(self, tag_id: int):
+        records = self._tag_id_filter(tag_id)
+        return '\n'.join(str(r) for r in records)
+
+    def _tag_id_filter(self, tag_id: int):
+        for record in self._get_data():
+            if record.get_tag_id() == tag_id:
+                yield record
+
+    def note_filter(self, fragment: str) -> str:
+        records = self._note_filter(fragment)
+        return '\n'.join(str(r) for r in records)
+
+    def _note_filter(self, fragment: str):
         for record in self._get_data():
             note = record.get_note()
             if note and fragment in note:
-                records.append(record)
-        return '\n'.join(str(r) for r in records)
+                yield record
 
     def sort(self):
         records = self._get_data()
