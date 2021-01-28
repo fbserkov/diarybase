@@ -90,20 +90,6 @@ class TestTagDict(unittest.TestCase):
             str(self._tag_dict),
         )
 
-    def test_save_and_load(self):
-        self._tag_dict.add('no tag')
-        self._tag_dict.add('test tag')
-        db.save()
-        db.clear()
-
-        db.load()
-        td = TagDict()
-        self.assertEqual(
-            '0) no tag\n'
-            '1) test tag',
-            str(td),
-        )
-
     def tearDown(self) -> None:
         db.clear()
         db.save()
@@ -368,18 +354,6 @@ class TestRecordList(unittest.TestCase):
             self._record_list.filter_record(tag_id=1, fragment='B'),
         )
 
-    def test_save_and_load(self):
-        dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
-        r = Record(dt, note='test')
-        self._record_list.append(r)
-        db.save()
-        db.clear()
-
-        db.load()
-        record_list = RecordList()
-        self.assertEqual(
-            '[15.01.2021 21:13:00] <no tag> test', str(record_list))
-
     def tearDown(self) -> None:
         db.clear()
         db.save()
@@ -396,20 +370,6 @@ class TestWordSet(unittest.TestCase):
 
     def test_check_note_update(self):
         self._word_set.check_note('test', update=True)
-
-    def test_save_and_load(self):
-        self._word_set.check_note('test', update=True)
-        db.load()
-        with self.assertRaises(Exception):
-            self._word_set.check_note('test')
-
-        self._word_set.check_note('test', update=True)
-        db.save()
-        db.clear()
-
-        db.load()
-        sc = WordSet()
-        sc.check_note('test')
 
     def tearDown(self) -> None:
         db.clear()
@@ -441,6 +401,46 @@ class TestDatabase(unittest.TestCase):
             value = db[key]
         db.load()
         self.assertEqual(value, db[key])
+
+    def test_save_and_load_1(self):
+        self._tag_dict.add('no tag')
+        self._tag_dict.add('test tag')
+        db.save()
+        db.clear()
+
+        db.load()
+        td = TagDict()
+        self.assertEqual(
+            '0) no tag\n'
+            '1) test tag',
+            str(td),
+        )
+
+    def test_save_and_load_2(self):
+        dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
+        r = Record(dt, note='test')
+        self._record_list.append(r)
+        db.save()
+        db.clear()
+
+        db.load()
+        record_list = RecordList()
+        self.assertEqual(
+            '[15.01.2021 21:13:00] <no tag> test', str(record_list))
+
+    def test_save_and_load_3(self):
+        self._word_set.check_note('test', update=True)
+        db.load()
+        with self.assertRaises(Exception):
+            self._word_set.check_note('test')
+
+        self._word_set.check_note('test', update=True)
+        db.save()
+        db.clear()
+
+        db.load()
+        sc = WordSet()
+        sc.check_note('test')
 
     def tearDown(self) -> None:
         db.clear()
