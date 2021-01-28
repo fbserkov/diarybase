@@ -243,11 +243,17 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
-    def test_tag_id_stat(self):
+    def test_get_tag_id_stat(self):
+        self.assertEqual({}, self._record_list.get_tag_id_stat())
+
         self._record_list.append(Record())
+        self.assertEqual({0: 1}, self._record_list.get_tag_id_stat())
+
         self._record_list.append(Record(tag_id=1))
+        self.assertEqual({0: 1, 1: 1}, self._record_list.get_tag_id_stat())
+
         self._record_list.append(Record(tag_id=1))
-        self.assertEqual({0: 1, 1: 2}, self._record_list.tag_id_stat())
+        self.assertEqual({0: 1, 1: 2}, self._record_list.get_tag_id_stat())
 
     def test_sort_dt(self):
         dt = datetime(year=2021, month=1, day=23, hour=17, minute=37)
@@ -510,6 +516,42 @@ class TestDiaryManager(unittest.TestCase):
             str(self._diary_manager.record_list),
         )
 
+    def test_tag_stat(self):
+        self.assertEqual('', self._diary_manager.tag_stat())
+
+        self._tag_dict.add('no tag')
+        self.assertEqual(
+            '0 no tag',
+            self._diary_manager.tag_stat(),
+        )
+        self._diary_manager.add_record(tag='no tag')
+        self.assertEqual(
+            '1 no tag',
+            self._diary_manager.tag_stat(),
+        )
+        self._tag_dict.add('test tag')
+        self.assertEqual(
+            '1 no tag\n'
+            '0 test tag',
+            self._diary_manager.tag_stat(),
+        )
+        self._diary_manager.add_record(tag='test tag')
+        self._diary_manager.add_record(tag='test tag')
+        self.assertEqual(
+            '2 test tag\n'
+            '1 no tag',
+            self._diary_manager.tag_stat(),
+        )
+        self._tag_dict.add('"ten" tag')
+        for _ in range(10):
+            self._diary_manager.add_record(tag='"ten" tag')
+        self.assertEqual(
+            '10 "ten" tag\n'
+            '2 test tag\n'
+            '1 no tag',
+            self._diary_manager.tag_stat(),
+        )
+
     def test_set_tag_id(self):
         dt = datetime(year=2021, month=1, day=27, hour=21, minute=15)
         self._tag_dict.add('tag B')
@@ -577,15 +619,6 @@ class TestDiaryManager(unittest.TestCase):
             '[27.01.2021 12:52:00] <second tag> second note\n'
             '[27.01.2021 12:52:00] <second tag> fourth note',
             self._diary_manager.tag_filter('second tag'),
-        )
-
-    def test_tag_stat(self):
-        self._tag_dict.add('no tag')
-        self._tag_dict.add('test tag')
-        self.assertEqual(
-            '0 no tag\n'
-            '0 test tag',
-            self._diary_manager.tag_stat(),
         )
 
     def tearDown(self) -> None:

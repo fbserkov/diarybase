@@ -48,7 +48,7 @@ class RecordList(DataGetter):
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
 
-    def tag_id_stat(self) -> dict:
+    def get_tag_id_stat(self) -> dict:
         result = {}
         for record in self:
             tag_id = record.get_tag_id()
