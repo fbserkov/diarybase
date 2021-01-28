@@ -48,6 +48,23 @@ class RecordList(DataGetter):
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
 
+    def sort(self):
+        records = self._get_data()
+        records.sort(key=lambda r: (
+            self._round_to_seconds_tenths(r), self._none_is_false(r)))
+
+    @staticmethod
+    def _round_to_seconds_tenths(record):
+        dt = record.get_dt()
+        td = timedelta(microseconds=dt.microsecond % 100000)
+        return dt - td
+
+    @staticmethod
+    def _none_is_false(record):
+        if record.is_active():
+            return True
+        return False
+
     def filter_record(self, **kwargs) -> str:
         records = self._filter(**kwargs)
         return '\n'.join(str(r) for r in records)
@@ -69,20 +86,3 @@ class RecordList(DataGetter):
             if kwargs['fragment'] not in note:
                 return False
         return True
-
-    def sort(self):
-        records = self._get_data()
-        records.sort(key=lambda r: (
-            self._round_to_seconds_tenths(r), self._none_is_false(r)))
-
-    @staticmethod
-    def _round_to_seconds_tenths(record):
-        dt = record.get_dt()
-        td = timedelta(microseconds=dt.microsecond % 100000)
-        return dt - td
-
-    @staticmethod
-    def _none_is_false(record):
-        if record.is_active():
-            return True
-        return False
