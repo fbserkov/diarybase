@@ -384,63 +384,49 @@ class TestDatabase(unittest.TestCase):
         os.remove('test.db')
         db.load()
 
-    def test_set_and_get(self):
+    def test_simple(self):
         key = 'key'
         value = 'value'
         db[key] = value
+
         self.assertEqual(value, db[key])
 
-    def test_save_and_load(self):
-        key = 'key'
-        value = 'value'
-        db[key] = value
         db.save()
         db.clear()
-
         with self.assertRaises(KeyError):
             value = db[key]
+
         db.load()
         self.assertEqual(value, db[key])
 
-    def test_save_and_load_1(self):
-        self._tag_dict.add('no tag')
-        self._tag_dict.add('test tag')
-        db.save()
-        db.clear()
-
-        db.load()
+    def test_complex(self):
         td = TagDict()
-        self.assertEqual(
-            '0) no tag\n'
-            '1) test tag',
-            str(td),
-        )
+        td.add('tag')
 
-    def test_save_and_load_2(self):
+        rl = RecordList()
         dt = datetime(year=2021, month=1, day=15, hour=21, minute=13)
-        r = Record(dt, note='test')
-        self._record_list.append(r)
-        db.save()
-        db.clear()
+        rl.append(Record(dt, note='test'))
 
-        db.load()
-        record_list = RecordList()
-        self.assertEqual(
-            '[15.01.2021 21:13:00] <no tag> test', str(record_list))
-
-    def test_save_and_load_3(self):
-        self._word_set.check_note('test', update=True)
-        db.load()
+        ws = WordSet()
         with self.assertRaises(Exception):
-            self._word_set.check_note('test')
+            ws.check_note('test')
+        ws.check_note('test', update=True)
 
-        self._word_set.check_note('test', update=True)
+        self.assertEqual('0) tag', str(td))
+        self.assertEqual('[15.01.2021 21:13:00] <tag> test', str(rl))
+        ws.check_note('test')
+
         db.save()
         db.clear()
+        self.assertEqual('', str(td))
+        self.assertEqual('', str(rl))
+        with self.assertRaises(Exception):
+            ws.check_note('test')
 
         db.load()
-        sc = WordSet()
-        sc.check_note('test')
+        self.assertEqual('0) tag', str(td))
+        self.assertEqual('[15.01.2021 21:13:00] <tag> test', str(rl))
+        ws.check_note('test')
 
     def tearDown(self) -> None:
         db.clear()
