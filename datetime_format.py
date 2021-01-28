@@ -1,11 +1,17 @@
-from datetime import datetime
+from datetime import date, datetime
 
-FORMAT = '%d.%m.%Y %H:%M:%S'
-
-
-def dt_to_str(_dt):
-    return _dt.strftime(FORMAT)
+DATE_FORMAT = '%d.%m.%Y'
+TIME_FORMAT = '%H:%M:%S'
+FORMAT = DATE_FORMAT + ' ' + TIME_FORMAT
 
 
-def str_to_dt(str_dt):
+def date_to_str(d: date) -> str:
+    return d.strftime(DATE_FORMAT)
+
+
+def datetime_to_str(dt: datetime) -> str:
+    return dt.strftime(FORMAT)
+
+
+def str_to_datetime(str_dt) -> datetime:
     return datetime.strptime(str_dt, FORMAT)

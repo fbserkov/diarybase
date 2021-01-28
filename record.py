@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from tagdict import TagDict
-from datetime_format import dt_to_str
+from datetime_format import datetime_to_str
 
 tag_dict = TagDict()
 
@@ -18,7 +18,7 @@ class Record:
         self._is_active = is_active
 
     def __str__(self):
-        result = '[' + dt_to_str(self._dt) + ']'
+        result = '[' + datetime_to_str(self._dt) + ']'
         result += ' <' + self._tag_id_and_is_active_to_str() + '>'
         if self._note:
             result += ' ' + self._note

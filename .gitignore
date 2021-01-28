@@ -1,5 +1,6 @@
 # Project exclude paths
 /venv/
+gui_proc.py
 main.db
 test.db
 usage.py
