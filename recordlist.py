@@ -42,11 +42,18 @@ class RecordList(DataGetter):
         record.set_note(note)
 
     def swap_tag_id(self, id_1, id_2):
-        for record in self._get_data():
+        for record in self:
             if record.get_tag_id() == id_1:
                 record.set_tag_id(id_2)
             elif record.get_tag_id() == id_2:
                 record.set_tag_id(id_1)
+
+    def tag_id_stat(self) -> dict:
+        result = {}
+        for record in self:
+            tag_id = record.get_tag_id()
+            result[tag_id] = result[tag_id] + 1 if tag_id in result else 1
+        return result
 
     def sort(self):
         records = self._get_data()

@@ -243,6 +243,12 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
+    def test_tag_id_stat(self):
+        self._record_list.append(Record())
+        self._record_list.append(Record(tag_id=1))
+        self._record_list.append(Record(tag_id=1))
+        self.assertEqual({0: 1, 1: 2}, self._record_list.tag_id_stat())
+
     def test_sort_dt(self):
         dt = datetime(year=2021, month=1, day=23, hour=17, minute=37)
         self._record_list.append(Record(dt))
