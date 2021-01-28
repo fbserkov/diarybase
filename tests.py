@@ -573,6 +573,15 @@ class TestDiaryManager(unittest.TestCase):
             self._diary_manager.tag_filter('second tag'),
         )
 
+    def test_tag_stat(self):
+        self._tag_dict.add('no tag')
+        self._tag_dict.add('test tag')
+        self.assertEqual(
+            '0 no tag\n'
+            '0 test tag',
+            self._diary_manager.tag_stat(),
+        )
+
     def tearDown(self) -> None:
         db.clear()
         db.save()

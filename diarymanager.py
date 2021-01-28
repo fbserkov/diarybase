@@ -33,5 +33,11 @@ class DiaryManager:
         old_id = self.tag_dict.set_id(new_id, tag)
         self.record_list.swap_tag_id(old_id, new_id)
 
-    def tag_filter(self, tag: str):
+    def tag_filter(self, tag: str) -> str:
         return self.record_list.filter_record(tag_id=self.tag_dict.get_id(tag))
+
+    def tag_stat(self) -> str:
+        result = []
+        for _id in self.tag_dict:
+            result.append('0 ' + self.tag_dict[_id])
+        return '\n'.join(result)
