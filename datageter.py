@@ -6,6 +6,9 @@ class DataGetter:
         self._data_key = None
         self._data_type = None
 
+    def __iter__(self):
+        return iter(self._get_data())
+
     def _get_data(self):
         if not (self._data_key and self._data_type):
             raise Exception

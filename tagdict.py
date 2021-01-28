@@ -7,9 +7,6 @@ class TagDict(DataGetter):
         self._data_key = 'tags'
         self._data_type = dict
 
-    def __iter__(self):
-        return iter(self._get_data())
-
     def __getitem__(self, item: int) -> str:
         try:
             return self._get_data()[item]

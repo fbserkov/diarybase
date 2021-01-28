@@ -14,9 +14,6 @@ class RecordList(DataGetter):
     def __getitem__(self, item):
         return self._get_data()[item]
 
-    def __iter__(self):
-        return iter(self._get_data())
-
     def __len__(self):
         return len(self._get_data())
 
