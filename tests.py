@@ -10,37 +10,6 @@ from tagdict import TagDict
 from wordset import WordSet
 
 
-class TestDatabase(unittest.TestCase):
-    def setUp(self) -> None:
-        db.load()
-
-    def test_no_file(self):
-        os.remove('test.db')
-        db.load()
-
-    def test_set_and_get(self):
-        key = 'key'
-        value = 'value'
-        db[key] = value
-        self.assertEqual(value, db[key])
-
-    def test_save_and_load(self):
-        key = 'key'
-        value = 'value'
-        db[key] = value
-        db.save()
-        db.clear()
-
-        with self.assertRaises(KeyError):
-            value = db[key]
-        db.load()
-        self.assertEqual(value, db[key])
-
-    def tearDown(self) -> None:
-        db.clear()
-        db.save()
-
-
 class TestTagDict(unittest.TestCase):
     def setUp(self) -> None:
         db.load()
@@ -441,6 +410,37 @@ class TestWordSet(unittest.TestCase):
         db.load()
         sc = WordSet()
         sc.check_note('test')
+
+    def tearDown(self) -> None:
+        db.clear()
+        db.save()
+
+
+class TestDatabase(unittest.TestCase):
+    def setUp(self) -> None:
+        db.load()
+
+    def test_no_file(self):
+        os.remove('test.db')
+        db.load()
+
+    def test_set_and_get(self):
+        key = 'key'
+        value = 'value'
+        db[key] = value
+        self.assertEqual(value, db[key])
+
+    def test_save_and_load(self):
+        key = 'key'
+        value = 'value'
+        db[key] = value
+        db.save()
+        db.clear()
+
+        with self.assertRaises(KeyError):
+            value = db[key]
+        db.load()
+        self.assertEqual(value, db[key])
 
     def tearDown(self) -> None:
         db.clear()
