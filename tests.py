@@ -643,11 +643,11 @@ class TestGUIManager(unittest.TestCase):
         self._gui_manager.delete_last_record()
         self.assertEqual(0, len(self._gui_manager.diary_manager.record_list))
 
-    def test_print_record_list(self):
-        self.assertEqual('', self._gui_manager.print_record_list())
+    def test_str_record_list(self):
+        self.assertEqual('', self._gui_manager.str_record_list())
         self._gui_manager.add_record()
         self.assertEqual(
-            '<KeyError: -1>', self._gui_manager.print_record_list()[22:])
+            '<KeyError: -1>', self._gui_manager.str_record_list()[22:])
 
     def tearDown(self) -> None:
         db.clear()

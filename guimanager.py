@@ -20,7 +20,7 @@ class GUIManager:
     def get_button_kwargs(self):
         return (
             dict(text=DELETE, command=self.delete_last_record),
-            dict(text=PRINT, command=lambda: print(self.print_record_list())),
+            dict(text=PRINT, command=lambda: print(self.str_record_list())),
         )
 
     @load_and_save
@@ -32,5 +32,5 @@ class GUIManager:
         self.diary_manager.record_list.delete_last_record()
 
     @load_and_save
-    def print_record_list(self) -> str:
+    def str_record_list(self) -> str:
         return str(self.diary_manager.record_list)
