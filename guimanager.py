@@ -1,3 +1,5 @@
+from typing import List
+
 from const import TEXT_AND_TAG
 from database import db
 from diarymanager import DiaryManager
@@ -34,5 +36,8 @@ class GUIManager:
         self.diary_manager.record_list.delete_last_record()
 
     @load_and_save
-    def str_record_list(self) -> str:
-        return str(self.diary_manager.record_list)
+    def str_record_list(self) -> List[str]:
+        result = []
+        for record in self.diary_manager.record_list:
+            result.append(str(record))
+        return result

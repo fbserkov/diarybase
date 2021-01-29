@@ -9,7 +9,9 @@ class GUI:
     def __init__(self):
         root = tk.Tk()
         self.gui_manager = GUIManager()
-        self.text = None
+        self.listbox_var = None
+        self.listbox = None
+
         self.create_widgets()
         self.update_record_list()
         root.mainloop()
@@ -18,13 +20,16 @@ class GUI:
         tk.Button(text=TEXT, command=self._add_update_call(COMMAND)).pack()
         for t, c in self.gui_manager.text_and_command_list:
             tk.Button(text=t, command=self._add_update_call(c)).pack()
-        self.text = tk.Text()
+
         tk.Button(
             text=DELETE,
             command=self._add_update_call(self.delete_last_record),
         ).pack()
         tk.Button(text=UPDATE, command=self.update_record_list).pack()
-        self.text.pack()
+
+        self.listbox_var = tk.StringVar()
+        self.listbox = tk.Listbox(width=80, listvariable=self.listbox_var)
+        self.listbox.pack()
 
     def _add_update_call(self, to_wrap):
         def wrapper():
@@ -36,9 +41,8 @@ class GUI:
         self.gui_manager.delete_last_record()
 
     def update_record_list(self):
-        self.text.delete('1.0', tk.END)
-        self.text.insert('1.0', self.gui_manager.str_record_list())
-        self.text.see(tk.END)
+        self.listbox_var.set(self.gui_manager.str_record_list())
+        self.listbox.yview_moveto(1)
 
 
 GUI()
