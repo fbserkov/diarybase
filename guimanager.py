@@ -1,4 +1,3 @@
-from const import DELETE, PRINT
 from database import db
 from diarymanager import DiaryManager
 
@@ -16,12 +15,6 @@ class GUIManager:
     def __init__(self):
         self.diary_manager = DiaryManager()
         self.diary_manager.record_list.set_str_len(100)
-
-    def get_button_kwargs(self):
-        return (
-            dict(text=DELETE, command=self.delete_last_record),
-            dict(text=PRINT, command=lambda: print(self.str_record_list())),
-        )
 
     @load_and_save
     def add_record(self):
