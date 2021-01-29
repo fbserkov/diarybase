@@ -18,9 +18,6 @@ class WordSet(DataGetter):
 
     def _get_note_set(self, note):
         result = set()
-        if not note:
-            return result
-
         note = self._filter_characters(note.lower())
         for word in note.split(' '):
             if word and not word.isdigit():

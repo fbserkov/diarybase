@@ -87,9 +87,6 @@ class RecordList(DataGetter):
             if r.get_tag_id() != kwargs['tag_id']:
                 return False
         if 'fragment' in kwargs:
-            note = r.get_note()
-            if not note:
-                return False
-            if kwargs['fragment'] not in note:
+            if kwargs['fragment'] not in r.get_note():
                 return False
         return True
