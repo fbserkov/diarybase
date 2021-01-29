@@ -1,8 +1,8 @@
 import tkinter as tk
 
 from const import DELETE, PRINT
+from gui_temp import TEXT, COMMAND
 from guimanager import GUIManager
-from gui_proc import PROC_LIST
 
 
 class GUI:
@@ -14,8 +14,9 @@ class GUI:
         root.mainloop()
 
     def create_widgets(self):
-        for i in range(len(PROC_LIST)):
-            tk.Button(text=PROC_LIST[i][0], command=PROC_LIST[i][1]).pack()
+        tk.Button(text=TEXT, command=COMMAND).pack()
+        for t, c in self.gui_manager.text_and_command_list:
+            tk.Button(text=t, command=c).pack()
         self.text = tk.Text()
         tk.Button(text=DELETE, command=self.delete_last_record).pack()
         tk.Button(text=PRINT, command=self.print_record_list).pack()
