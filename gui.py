@@ -8,11 +8,11 @@ from guimanager import GUIManager
 def add_update_call(to_wrap):
     def wrapper():
         to_wrap()
-        lbf.update_record_list()
+        record_list_frame.update_record_list()
     return wrapper
 
 
-class ButtonFrame(tk.Frame):
+class MenuFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
@@ -23,11 +23,14 @@ class ButtonFrame(tk.Frame):
             self, text=DELETE,
             command=add_update_call(gui_manager.delete_last_record),
         ).pack()
-        tk.Button(self, text=UPDATE, command=lbf.update_record_list).pack()
+        tk.Button(
+            self, text=UPDATE,
+            command=record_list_frame.update_record_list,
+        ).pack()
         self.pack(side=tk.LEFT)
 
 
-class ListboxFrame(tk.Frame):
+class RecordListFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         frame = tk.Frame(self)
@@ -67,11 +70,11 @@ class ListboxFrame(tk.Frame):
 
     def update_record_list(self):
         self.listbox_var.set(gui_manager.str_record_list())
-        self.listbox.yview_moveto(1)
+        self.listbox.yview_moveto(fraction=1)
 
 
 root = tk.Tk()
 gui_manager = GUIManager()
-lbf = ListboxFrame(root)
-ButtonFrame(root)
+record_list_frame = RecordListFrame(root)
+MenuFrame(root)
 root.mainloop()
