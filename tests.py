@@ -633,21 +633,21 @@ class TestGUIManager(unittest.TestCase):
         self._gui_manager = GUIManager()
 
     def test_add_record(self):
-        self.assertEqual(0, len(self._gui_manager.diary_manager.record_list))
+        self.assertEqual(0, len(self._gui_manager._diary_manager.record_list))
         self._gui_manager.add_record()
-        self.assertEqual(1, len(self._gui_manager.diary_manager.record_list))
+        self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
 
     def test_delete_last_record(self):
         self._gui_manager.add_record()
-        self.assertEqual(1, len(self._gui_manager.diary_manager.record_list))
+        self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
         self._gui_manager.delete_last_record()
-        self.assertEqual(0, len(self._gui_manager.diary_manager.record_list))
+        self.assertEqual(0, len(self._gui_manager._diary_manager.record_list))
 
     def test_str_record_list(self):
-        self.assertEqual('', self._gui_manager.str_record_list())
+        self.assertEqual([], self._gui_manager.str_record_list())
         self._gui_manager.add_record()
         self.assertEqual(
-            '<KeyError: -1>', self._gui_manager.str_record_list()[22:])
+            '<KeyError: -1>', self._gui_manager.str_record_list()[0][22:])
 
     def tearDown(self) -> None:
         db.clear()
