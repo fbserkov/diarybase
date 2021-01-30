@@ -667,6 +667,12 @@ class TestGUIManager(unittest.TestCase):
         self.assertEqual('KeyError: -1', tag)
         self.assertEqual('', note)
 
+    def test_update_record(self):
+        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.update_record(0, 'test')
+        record = self._gui_manager._diary_manager.record_list[0]
+        self.assertEqual('test', record.get_note())
+
     def tearDown(self) -> None:
         db.clear()
         db.save()

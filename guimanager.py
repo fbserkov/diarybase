@@ -7,9 +7,9 @@ from diarymanager import DiaryManager
 
 
 def load_and_save(to_wrap):
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         db.load()
-        result = to_wrap(*args)
+        result = to_wrap(*args, **kwargs)
         db.save()
         return result
     return wrapper
@@ -39,7 +39,7 @@ class GUIManager:
         return result
 
     @load_and_save
-    def split_record(self, index) -> Tuple[str, str, str]:
+    def split_record(self, index: int) -> Tuple[str, str, str]:
         record = self._diary_manager.record_list[index]
         tag_id = record.get_tag_id()
         return (
@@ -47,3 +47,8 @@ class GUIManager:
             self._diary_manager.tag_dict[tag_id],
             record.get_note(),
         )
+
+    @load_and_save
+    def update_record(self, index: int, note: str) -> None:
+        record = self._diary_manager.record_list[index]
+        record.set_note(note)
