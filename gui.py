@@ -1,7 +1,6 @@
 import tkinter as tk
 
 from const import DELETE, SAVE, UPDATE
-from gui_temp import TEXT, COMMAND
 from guimanager import GUIManager
 
 
@@ -17,9 +16,8 @@ class MenuFrame(tk.Frame):
         tk.Frame.__init__(self, master)
         self.pack(side=tk.LEFT)
 
-        tk.Button(self, text=TEXT, command=add_update_call(COMMAND)).pack()
-        for t, c in gui_manager.text_and_command_list:
-            tk.Button(self, text=t, command=add_update_call(c)).pack()
+        for text, command in gui_manager.text_and_command_list:
+            tk.Button(self, text=text, command=add_update_call(command)).pack()
         tk.Button(
             self, text=DELETE,
             command=add_update_call(gui_manager.delete_last_record),

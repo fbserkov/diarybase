@@ -644,23 +644,23 @@ class TestGUIManager(unittest.TestCase):
 
     def test_add_record_is_active_none(self):
         self.assertEqual(0, len(self._gui_manager._diary_manager.record_list))
-        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.add_record()
         self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
 
     def test_delete_last_record(self):
-        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.add_record()
         self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
         self._gui_manager.delete_last_record()
         self.assertEqual(0, len(self._gui_manager._diary_manager.record_list))
 
     def test_str_record_list(self):
         self.assertEqual([], self._gui_manager.str_record_list())
-        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.add_record()
         self.assertEqual(
             '<KeyError: -1>', self._gui_manager.str_record_list()[0][22:])
 
     def test_split_record(self):
-        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.add_record()
         record = self._gui_manager._diary_manager.record_list[0]
 
         dt, tag, note = self._gui_manager.split_record(0)
@@ -670,7 +670,7 @@ class TestGUIManager(unittest.TestCase):
 
     def test_update_record(self):
         line = '30.01.2021 21:26:00'
-        self._gui_manager.add_record_is_active_none('')
+        self._gui_manager.add_record()
         self._gui_manager.update_record(index=0, str_dt=line, note='test')
 
         record = self._gui_manager._diary_manager.record_list[0]

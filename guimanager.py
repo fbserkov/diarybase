@@ -1,6 +1,6 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
-from const import TEXT_AND_TAG
+from const import TEXT_TAG_IS_ACTIVE
 from database import db
 from datetime_format import datetime_to_str, str_to_datetime
 from diarymanager import DiaryManager
@@ -19,13 +19,17 @@ class GUIManager:
     def __init__(self):
         self._diary_manager = DiaryManager()
         self.text_and_command_list = (
-            (text, lambda name=tag: self.add_record_is_active_none(name))
-            for text, tag in TEXT_AND_TAG
+            (
+                text, lambda tag=tag, is_active=is_active:
+                self.add_record(tag, is_active),
+            )
+            for text, tag, is_active in TEXT_TAG_IS_ACTIVE
         )
 
     @load_and_save
-    def add_record_is_active_none(self, name: str) -> None:
-        self._diary_manager.add_record(tag=name)
+    def add_record(
+            self, tag: str = '', is_active: Optional[bool] = None) -> None:
+        self._diary_manager.add_record(tag=tag, is_active=is_active)
 
     @load_and_save
     def delete_last_record(self) -> None:
