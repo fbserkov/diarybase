@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime
 
 from database import db
-from datetime_format import datetime_to_str
+from datetime_format import datetime_to_str, str_to_datetime
 from diarymanager import DiaryManager
 from guimanager import GUIManager
 from record import Record
@@ -118,7 +118,8 @@ class TestRecord(unittest.TestCase):
 
     def test_dt(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
-        r = Record(dt)
+        r = Record()
+        r.set_dt(dt)
         self.assertEqual(dt, r.get_dt())
         self.assertEqual('[18.01.2021 18:26:00] <no tag>', str(r))
 
@@ -668,9 +669,12 @@ class TestGUIManager(unittest.TestCase):
         self.assertEqual('', note)
 
     def test_update_record(self):
+        line = '30.01.2021 21:26:00'
         self._gui_manager.add_record_is_active_none('')
-        self._gui_manager.update_record(0, 'test')
+        self._gui_manager.update_record(index=0, str_dt=line, note='test')
+
         record = self._gui_manager._diary_manager.record_list[0]
+        self.assertEqual(str_to_datetime(line), record.get_dt())
         self.assertEqual('test', record.get_note())
 
     def tearDown(self) -> None:

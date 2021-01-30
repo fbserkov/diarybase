@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from const import TEXT_AND_TAG
 from database import db
-from datetime_format import datetime_to_str
+from datetime_format import datetime_to_str, str_to_datetime
 from diarymanager import DiaryManager
 
 
@@ -49,6 +49,11 @@ class GUIManager:
         )
 
     @load_and_save
-    def update_record(self, index: int, note: str) -> None:
+    def update_record(self, index: int, str_dt: str, note: str) -> bool:
         record = self._diary_manager.record_list[index]
+        try:
+            record.set_dt(str_to_datetime(str_dt))
+        except ValueError:
+            return False
         record.set_note(note)
+        return True

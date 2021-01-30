@@ -87,8 +87,12 @@ class RecordFrame(tk.Frame):
         curselection = record_list_frame.listbox.curselection()
         if not curselection:
             return
-        gui_manager.update_record(
-            index=curselection[0], note=self._text.get('1.0', tk.END + '-1c'))
+        if not gui_manager.update_record(
+                index=curselection[0],
+                str_dt=self._dt_var.get(),
+                note=self._text.get('1.0', tk.END + '-1c'),
+        ):
+            self._text.insert('1.0', 'ValueError\n')
 
 
 root = tk.Tk()
