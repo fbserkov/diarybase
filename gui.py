@@ -36,23 +36,34 @@ class ListboxFrame(tk.Frame):
         self.listbox_var = tk.StringVar(frame)
         self.listbox = tk.Listbox(
             frame, width=80, listvariable=self.listbox_var)
-        self.listbox.bind('<<ListboxSelect>>', self._listbox_callback)
+        self.listbox.bind('<<ListboxSelect>>', self._split_record)
         self.listbox.pack(side=tk.LEFT)
 
         sb = tk.Scrollbar(frame, command=self.listbox.yview)
         self.listbox.configure(yscrollcommand=sb.set)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.entry_var = tk.StringVar(self)
-        self.entry = tk.Entry(self, width=80, textvariable=self.entry_var)
-        self.entry.pack()
+        frame = tk.Frame(self)
+        frame.pack()
+
+        self._dt_var = tk.StringVar(frame)
+        self._tag_var = tk.StringVar(frame)
+        self._note_var = tk.StringVar(frame)
+        tk.Entry(frame, width=20, textvariable=self._dt_var).pack(side=tk.LEFT)
+        tk.Entry(
+            frame, width=20, textvariable=self._tag_var).pack(side=tk.LEFT)
+        tk.Entry(
+            frame, width=40, textvariable=self._note_var).pack(side=tk.LEFT)
 
         self.update_record_list()
         self.pack(side=tk.RIGHT)
 
-    def _listbox_callback(self, event):
+    def _split_record(self, event):
         index = event.widget.curselection()[0]
-        self.entry_var.set(gui_manager.get_record(index))
+        dt, tag, note = gui_manager.split_record(index)
+        self._dt_var.set(dt)
+        self._tag_var.set(tag)
+        self._note_var.set(note)
 
     def update_record_list(self):
         self.listbox_var.set(gui_manager.str_record_list())

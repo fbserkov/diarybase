@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Tuple
 
 from const import TEXT_AND_TAG
 from database import db
+from datetime_format import datetime_to_str
 from diarymanager import DiaryManager
-from record import Record
 
 
 def load_and_save(to_wrap):
@@ -39,5 +39,11 @@ class GUIManager:
         return result
 
     @load_and_save
-    def get_record(self, index) -> Record:
-        return self._diary_manager.record_list[index]
+    def split_record(self, index) -> Tuple[str, str, str]:
+        record = self._diary_manager.record_list[index]
+        tag_id = record.get_tag_id()
+        return (
+            datetime_to_str(record.get_dt()),
+            self._diary_manager.tag_dict[tag_id],
+            record.get_note(),
+        )
