@@ -17,6 +17,13 @@ class Record:
         self._note = note
         self._is_active = is_active
 
+    def __eq__(self, other):
+        return (
+            self._dt == other.get_dt() and
+            self._tag_id == other.get_tag_id() and
+            self._note == other.get_note()
+        )
+
     def __str__(self):
         result = '[' + datetime_to_str(self._dt) + ']'
         result += ' <' + self._tag_id_and_is_active_to_str() + '>'
@@ -41,7 +48,7 @@ class Record:
     def set_tag_id(self, _id: int) -> None:
         self._tag_id = _id
 
-    def get_note(self) -> Optional[str]:
+    def get_note(self) -> str:
         return self._note
 
     def set_note(self, note: str) -> None:

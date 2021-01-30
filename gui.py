@@ -4,8 +4,6 @@ from const import DELETE, UPDATE
 from gui_temp import TEXT, COMMAND
 from guimanager import GUIManager
 
-gui_manager = GUIManager()
-
 
 def add_update_call(to_wrap):
     def wrapper():
@@ -30,6 +28,7 @@ class ButtonFrame(tk.Frame):
         ).pack()
         tk.Button(
             master=self, text=UPDATE, command=lbf.update_record_list).pack()
+        self.pack(side=tk.LEFT)
 
 
 class ListboxFrame(tk.Frame):
@@ -48,6 +47,7 @@ class ListboxFrame(tk.Frame):
         self.entry.pack()
 
         self.update_record_list()
+        self.pack(side=tk.RIGHT)
 
     def _listbox_callback(self, event):
         index = event.widget.curselection()[0]
@@ -59,8 +59,7 @@ class ListboxFrame(tk.Frame):
 
 
 root = tk.Tk()
+gui_manager = GUIManager()
 lbf = ListboxFrame(master=root)
 bf = ButtonFrame(master=root)
-bf.pack()
-lbf.pack()
 root.mainloop()
