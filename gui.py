@@ -16,34 +16,35 @@ class ButtonFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
-        tk.Button(
-            master=self, text=TEXT, command=add_update_call(COMMAND),
-        ).pack()
+        tk.Button(self, text=TEXT, command=add_update_call(COMMAND)).pack()
         for t, c in gui_manager.text_and_command_list:
-            tk.Button(
-                master=self, text=t, command=add_update_call(c)).pack()
+            tk.Button(self, text=t, command=add_update_call(c)).pack()
         tk.Button(
-            master=self, text=DELETE,
+            self, text=DELETE,
             command=add_update_call(gui_manager.delete_last_record),
         ).pack()
-        tk.Button(
-            master=self, text=UPDATE, command=lbf.update_record_list).pack()
+        tk.Button(self, text=UPDATE, command=lbf.update_record_list).pack()
         self.pack(side=tk.LEFT)
 
 
 class ListboxFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        frame = tk.Frame(self)
+        frame.pack()
 
-        self.listbox_var = tk.StringVar(master=self)
+        self.listbox_var = tk.StringVar(frame)
         self.listbox = tk.Listbox(
-            master=self, width=80, listvariable=self.listbox_var)
+            frame, width=80, listvariable=self.listbox_var)
         self.listbox.bind('<<ListboxSelect>>', self._listbox_callback)
-        self.listbox.pack()
+        self.listbox.pack(side=tk.LEFT)
 
-        self.entry_var = tk.StringVar(master=self)
-        self.entry = tk.Entry(
-            master=self, width=80, textvariable=self.entry_var)
+        sb = tk.Scrollbar(frame, command=self.listbox.yview)
+        self.listbox.configure(yscrollcommand=sb.set)
+        sb.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.entry_var = tk.StringVar(self)
+        self.entry = tk.Entry(self, width=80, textvariable=self.entry_var)
         self.entry.pack()
 
         self.update_record_list()
@@ -60,6 +61,6 @@ class ListboxFrame(tk.Frame):
 
 root = tk.Tk()
 gui_manager = GUIManager()
-lbf = ListboxFrame(master=root)
-bf = ButtonFrame(master=root)
+lbf = ListboxFrame(root)
+ButtonFrame(root)
 root.mainloop()
