@@ -1,3 +1,5 @@
+import doctest
+import importlib
 import os
 import unittest
 from datetime import datetime
@@ -10,6 +12,12 @@ from record import Record
 from recordlist import RecordList
 from tagdict import TagDict
 from wordset import WordSet
+
+
+def load_tests(loader, tests, ignore):
+    lib = importlib.import_module('datetime_format')
+    tests.addTests(doctest.DocTestSuite(lib))
+    return tests
 
 
 class TestTagDict(unittest.TestCase):
