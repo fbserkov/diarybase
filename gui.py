@@ -69,11 +69,15 @@ class RecordFrame(tk.Frame):
         self._text = tk.Text(frame, width=40, height=4)
         self._text.pack(side=tk.LEFT)
         tk.Button(
-            frame, text=SAVE, command=self._update_record).pack(side=tk.LEFT)
+            frame, text=SAVE,
+            command=add_update_call(self._update_record),
+        ).pack(side=tk.LEFT)
 
     def split_record(self, event):
-        index = event.widget.curselection()[0]
-        dt, tag, note = gui_manager.split_record(index)
+        curselection = event.widget.curselection()
+        if not curselection:
+            return
+        dt, tag, note = gui_manager.split_record(curselection[0])
         self._dt_var.set(dt)
         self._tag_var.set(tag)
         self._text.delete('1.0', tk.END)
@@ -81,11 +85,10 @@ class RecordFrame(tk.Frame):
 
     def _update_record(self):
         curselection = record_list_frame.listbox.curselection()
-        if curselection:
-            gui_manager.update_record(
-                index=curselection[0],
-                note=self._text.get('1.0', tk.END + '-1c'),
-            )
+        if not curselection:
+            return
+        gui_manager.update_record(
+            index=curselection[0], note=self._text.get('1.0', tk.END + '-1c'))
 
 
 root = tk.Tk()
