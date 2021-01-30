@@ -5,38 +5,41 @@ from gui_temp import TEXT, COMMAND
 from guimanager import GUIManager
 
 
-class GUI:
-    def __init__(self):
-        root = tk.Tk()
+class GUI(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
         self._gui_manager = GUIManager()
 
-        self._listbox_var = None
-        self._listbox = None
-        self._entry_var = None
-        self._entry = None
+        self._listbox_var = tk.StringVar(master=self)
+        self._listbox = tk.Listbox(
+            master=self, width=80, listvariable=self._listbox_var)
+        self._entry_var = tk.StringVar(master=self)
+        self._entry = tk.Entry(
+            master=self, width=80, textvariable=self._entry_var)
 
         self._create_widgets()
         self._update_record_list()
-        root.mainloop()
+        self.pack()
 
     def _create_widgets(self):
-        tk.Button(text=TEXT, command=self._add_update_call(COMMAND)).pack()
+        tk.Button(
+            master=self, text=TEXT,
+            command=self._add_update_call(COMMAND),
+        ).pack()
         for t, c in self._gui_manager.text_and_command_list:
-            tk.Button(text=t, command=self._add_update_call(c)).pack()
+            tk.Button(master=self, text=t, command=self._add_update_call(c)).pack()
 
         tk.Button(
-            text=DELETE,
+            master=self, text=DELETE,
             command=self._add_update_call(self._delete_last_record),
         ).pack()
-        tk.Button(text=UPDATE, command=self._update_record_list).pack()
+        tk.Button(
+            master=self, text=UPDATE,
+            command=self._update_record_list,
+        ).pack()
 
-        self._listbox_var = tk.StringVar()
-        self._listbox = tk.Listbox(width=80, listvariable=self._listbox_var)
         self._listbox.bind('<<ListboxSelect>>', self._listbox_callback)
         self._listbox.pack()
-
-        self._entry_var = tk.StringVar()
-        self._entry = tk.Entry(width=80, textvariable=self._entry_var)
         self._entry.pack()
 
     def _add_update_call(self, to_wrap):
@@ -57,4 +60,6 @@ class GUI:
         self._listbox.yview_moveto(1)
 
 
-GUI()
+root = tk.Tk()
+GUI(master=root)
+root.mainloop()
