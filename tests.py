@@ -510,6 +510,19 @@ class TestDiaryManager(unittest.TestCase):
             str(self._diary_manager.record_list),
         )
 
+    def test_update_record(self):
+        self._diary_manager.add_record()
+
+        self._tag_dict.add('tag')
+        dt = datetime(year=2021, month=2, day=1, hour=8, minute=57)
+        self._diary_manager.update_record(
+            0, dt, 'tag', is_active=True, note='test', update=True)
+
+        self.assertEqual(
+            '[01.02.2021 08:57:00] <tag: start> test',
+            str(self._diary_manager.record_list),
+        )
+
     def test_replace_note(self):
         dt = datetime(year=2021, month=1, day=25, hour=19, minute=57)
         self._diary_manager.add_record(dt, note='first', update=True)
