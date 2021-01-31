@@ -11,11 +11,11 @@ class RecordList(DataGetter):
         self._data_type = list
         self._str_len = str_len
 
-    def __getitem__(self, item):
-        return self._get_data()[item]
-
     def __len__(self):
         return len(self._get_data())
+
+    def __getitem__(self, item):
+        return self._get_data()[item]
 
     def __str__(self):
         last_records = self._get_data()[-self._str_len:]
