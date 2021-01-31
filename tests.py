@@ -684,13 +684,22 @@ class TestGUIManager(unittest.TestCase):
         self.assertEqual('', note)
 
     def test_update_record(self):
-        line = '30.01.2021 21:26:00'
         self._gui_manager.add_record()
-        self._gui_manager.update_record(index=0, str_dt=line, note='test')
+        self.assertEqual(
+            '<KeyError: -1>',
+            str(self._gui_manager._diary_manager.record_list)[22:],
+        )
 
-        record = self._gui_manager._diary_manager.record_list[0]
-        self.assertEqual(str_to_datetime(line), record.get_dt())
-        self.assertEqual('test', record.get_note())
+        self._gui_manager._diary_manager.tag_dict.add('test tag')
+        db.save()
+        self._gui_manager.update_record(
+            index=0, str_dt='30.01.2021 21:26:00', tag='test tag',
+            is_active=True, note='test note', update=True,
+        )
+        self.assertEqual(
+            '[30.01.2021 21:26:00] <test tag: start> test note',
+            str(self._gui_manager._diary_manager.record_list),
+        )
 
     def tearDown(self) -> None:
         db.clear()

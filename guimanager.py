@@ -56,11 +56,17 @@ class GUIManager:
         )
 
     @load_and_save
-    def update_record(self, index: int, str_dt: str, note: str) -> bool:
-        record = self._diary_manager.record_list[index]
-        try:
-            record.set_dt(str_to_datetime(str_dt))
-        except ValueError:
-            return False
-        record.set_note(note)
+    def update_record(
+            self, index: int, str_dt: str, tag: str,
+            is_active: Optional[bool], note: str, update=False,
+    ) -> bool:
+        if str_dt:
+            try:
+                dt = str_to_datetime(str_dt)
+            except ValueError:
+                return False
+        else:
+            dt = None
+        self._diary_manager.update_record(
+            index, dt, tag, is_active, note, update)
         return True
