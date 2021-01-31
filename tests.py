@@ -15,6 +15,7 @@ from wordset import WordSet
 
 
 def load_tests(loader, tests, ignore):
+    _, _ = loader, ignore
     lib = importlib.import_module('datetime_format')
     tests.addTests(doctest.DocTestSuite(lib))
     return tests

@@ -20,16 +20,18 @@ class GUIManager:
         self._diary_manager = DiaryManager()
         self.text_and_command_list = (
             (
-                text, lambda tag=tag, is_active=is_active:
-                self.add_record(tag, is_active),
+                text, lambda t=tag, ia=is_active:
+                self.add_record(t, ia),
             )
             for text, tag, is_active in TEXT_TAG_IS_ACTIVE
         )
 
     @load_and_save
     def add_record(
-            self, tag: str = '', is_active: Optional[bool] = None) -> None:
-        self._diary_manager.add_record(tag=tag, is_active=is_active)
+            self, tag: str = '', is_active: Optional[bool] = None,
+            note: str = '',
+    ) -> None:
+        self._diary_manager.add_record(tag=tag, is_active=is_active, note=note)
 
     @load_and_save
     def delete_last_record(self) -> None:
