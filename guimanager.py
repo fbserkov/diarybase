@@ -45,12 +45,13 @@ class GUIManager:
         return result
 
     @load_and_save
-    def split_record(self, index: int) -> Tuple[str, str, str]:
+    def split_record(self, index: int) -> Tuple[str, str, Optional[bool], str]:
         record = self._diary_manager.record_list[index]
         tag_id = record.get_tag_id()
         return (
             datetime_to_str(record.get_dt()),
             self._diary_manager.tag_dict[tag_id],
+            record.is_active(),
             record.get_note(),
         )
 

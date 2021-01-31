@@ -677,9 +677,10 @@ class TestGUIManager(unittest.TestCase):
         self._gui_manager.add_record()
         record = self._gui_manager._diary_manager.record_list[0]
 
-        dt, tag, note = self._gui_manager.split_record(0)
+        dt, tag, is_active, note = self._gui_manager.split_record(0)
         self.assertEqual(datetime_to_str(record.get_dt()), dt)
         self.assertEqual('KeyError: -1', tag)
+        self.assertEqual(None, is_active)
         self.assertEqual('', note)
 
     def test_update_record(self):
