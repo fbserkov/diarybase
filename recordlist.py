@@ -37,8 +37,8 @@ class RecordList(DataGetter):
     def append(self, r: Record):
         self._get_data().append(r)
 
-    def delete_last_record(self):
-        self._get_data().pop()
+    def delete_record(self, index: int = -1) -> None:
+        self._get_data().pop(index)
 
     def swap_tag_id(self, id_1, id_2):
         for record in self:

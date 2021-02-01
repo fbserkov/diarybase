@@ -35,8 +35,8 @@ class GUIManager:
             return exc
 
     @load_and_save
-    def delete_last_record(self) -> None:
-        self._diary_manager.record_list.delete_last_record()
+    def delete_record(self, index: int = -1) -> None:
+        self._diary_manager.record_list.delete_record(index)
 
     @load_and_save
     def str_record_list(self) -> (List[int], List[str]):

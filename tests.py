@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime
 
 from database import db
-from datetime_format import datetime_to_str, str_to_datetime
+from datetime_format import datetime_to_str
 from diarymanager import DiaryManager
 from guimanager import GUIManager
 from record import Record
@@ -193,7 +193,7 @@ class TestRecordList(unittest.TestCase):
             str(self._record_list),
         )
 
-    def test_delete_last_record(self):
+    def test_delete_record(self):
         dt = datetime(year=2021, month=1, day=25, hour=16, minute=21)
         self._record_list.append(Record(dt, note='first'))
         dt = datetime(year=2021, month=1, day=25, hour=16, minute=23)
@@ -204,9 +204,9 @@ class TestRecordList(unittest.TestCase):
             '[25.01.2021 16:23:00] <no tag> second',
             str(self._record_list),
         )
-        self._record_list.delete_last_record()
+        self._record_list.delete_record(index=0)
         self.assertEqual(
-            '[25.01.2021 16:21:00] <no tag> first',
+            '[25.01.2021 16:23:00] <no tag> second',
             str(self._record_list),
         )
 
@@ -616,17 +616,17 @@ class TestGUIManager(unittest.TestCase):
         self._gui_manager.add_record()
         self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
 
-    def test_delete_last_record(self):
+    def test_delete_record(self):
         self._gui_manager.add_record()
         self.assertEqual(1, len(self._gui_manager._diary_manager.record_list))
-        self._gui_manager.delete_last_record()
+        self._gui_manager.delete_record()
         self.assertEqual(0, len(self._gui_manager._diary_manager.record_list))
 
     def test_str_record_list(self):
-        self.assertEqual([], self._gui_manager.str_record_list())
+        self.assertEqual(([], []), self._gui_manager.str_record_list())
         self._gui_manager.add_record()
         self.assertEqual(
-            '<KeyError: -1>', self._gui_manager.str_record_list()[0][22:])
+            '<KeyError: -1>', self._gui_manager.str_record_list()[1][0][22:])
 
     def test_split_record(self):
         self._gui_manager.add_record()

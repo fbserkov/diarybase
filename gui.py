@@ -13,8 +13,11 @@ class MenuFrame(tk.Frame):
         tk.Button(self, text=UPDATE, command=self._update_callback).pack()
 
     @staticmethod
-    def _delete_callback():
-        gui_manager.delete_last_record()
+    def _delete_callback() -> None:
+        index = record_list_frame.get_index()
+        if index == -1:
+            return
+        gui_manager.delete_record(index)
         record_list_frame.update_listbox()
         record_list_frame.move_view_to_end()
 
@@ -45,8 +48,8 @@ class RecordListFrame(tk.Frame):
         self.move_view_to_end()
 
     def update_listbox(self):
-        self._listbox.selection_clear(0, tk.END)
         self._index_list, value = gui_manager.str_record_list()
+        self._listbox.selection_clear(0, tk.END)
         self._listbox_var.set(value)
         record_frame.init()
 
