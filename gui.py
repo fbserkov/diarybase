@@ -14,22 +14,26 @@ class MenuFrame(tk.Frame):
             tk.Button(
                 self, text=text, command=self._button_callback(command)).pack()
         tk.Button(self, text=DELETE, command=self._delete_callback).pack()
-        tk.Button(
-            self, text=UPDATE,
-            command=record_list_frame.update_listbox,
-        ).pack()
+        tk.Button(self, text=UPDATE, command=self._update_callback).pack()
 
     @staticmethod
     def _button_callback(command):
         def wrapper():
             command()
             record_list_frame.update_listbox()
+            record_list_frame.move_view_to_end()
         return wrapper
 
     @staticmethod
     def _delete_callback():
         gui_manager.delete_last_record()
         record_list_frame.update_listbox()
+        record_list_frame.move_view_to_end()
+
+    @staticmethod
+    def _update_callback():
+        record_list_frame.update_listbox()
+        record_list_frame.move_view_to_end()
 
 
 class RecordListFrame(tk.Frame):
@@ -47,10 +51,14 @@ class RecordListFrame(tk.Frame):
         sb = tk.Scrollbar(frame, command=self._listbox.yview)
         self._listbox.configure(yscrollcommand=sb.set)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
+
         self.update_listbox()
+        self.move_view_to_end()
 
     def update_listbox(self):
         self._listbox_var.set(gui_manager.str_record_list())
+
+    def move_view_to_end(self):
         self._listbox.yview_moveto(fraction=1)
 
     def select_callback(self, _):
@@ -96,8 +104,13 @@ class RecordFrame(tk.Frame):
 
     def _save_callback(self) -> None:
         index = record_list_frame.get_index()
-        self._add_record() if index == -1 else self._update_record(index)
-        record_list_frame.update_listbox()
+        if index == -1:
+            self._add_record()
+            record_list_frame.update_listbox()
+            record_list_frame.move_view_to_end()
+        else:
+            self._update_record(index)
+            record_list_frame.update_listbox()
 
     def _add_record(self) -> None:
         gui_manager.add_record(
