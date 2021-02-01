@@ -5,28 +5,31 @@ from const import DELETE, SAVE, UPDATE
 from guimanager import GUIManager
 
 
-def add_update_call(to_wrap):
-    def wrapper():
-        to_wrap()
-        record_list_frame.update_listbox()
-    return wrapper
-
-
 class MenuFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self.pack(side=tk.LEFT)
 
         for text, command in gui_manager.text_and_command_list:
-            tk.Button(self, text=text, command=add_update_call(command)).pack()
-        tk.Button(
-            self, text=DELETE,
-            command=add_update_call(gui_manager.delete_last_record),
-        ).pack()
+            tk.Button(
+                self, text=text, command=self._button_callback(command)).pack()
+        tk.Button(self, text=DELETE, command=self._delete_callback).pack()
         tk.Button(
             self, text=UPDATE,
             command=record_list_frame.update_listbox,
         ).pack()
+
+    @staticmethod
+    def _button_callback(command):
+        def wrapper():
+            command()
+            record_list_frame.update_listbox()
+        return wrapper
+
+    @staticmethod
+    def _delete_callback():
+        gui_manager.delete_last_record()
+        record_list_frame.update_listbox()
 
 
 class RecordListFrame(tk.Frame):
@@ -81,9 +84,7 @@ class RecordFrame(tk.Frame):
         self._text = tk.Text(frame, width=40, height=4)
         self._text.pack(side=tk.LEFT)
         tk.Button(
-            frame, text=SAVE,
-            command=add_update_call(self._save_callback),
-        ).pack(side=tk.LEFT)
+            frame, text=SAVE, command=self._save_callback).pack(side=tk.LEFT)
 
     def split_record(self, index: int) -> None:
         dt, tag, is_active, note = gui_manager.split_record(index)
@@ -96,6 +97,7 @@ class RecordFrame(tk.Frame):
     def _save_callback(self) -> None:
         index = record_list_frame.get_index()
         self._add_record() if index == -1 else self._update_record(index)
+        record_list_frame.update_listbox()
 
     def _add_record(self) -> None:
         gui_manager.add_record(
