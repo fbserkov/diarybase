@@ -37,24 +37,29 @@ class RecordListFrame(tk.Frame):
         frame = tk.Frame(self)
         frame.pack()
         self._listbox_var = tk.StringVar(frame)
-        self.listbox = tk.Listbox(
+        self._listbox = tk.Listbox(
             frame, width=80, listvariable=self._listbox_var)
-        self.listbox.bind('<<ListboxSelect>>', self.select_callback)
-        self.listbox.pack(side=tk.LEFT)
-        sb = tk.Scrollbar(frame, command=self.listbox.yview)
-        self.listbox.configure(yscrollcommand=sb.set)
+        self._listbox.bind('<<ListboxSelect>>', self.select_callback)
+        self._listbox.pack(side=tk.LEFT)
+        sb = tk.Scrollbar(frame, command=self._listbox.yview)
+        self._listbox.configure(yscrollcommand=sb.set)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
         self.update_record_list()
 
     def update_record_list(self):
         self._listbox_var.set(gui_manager.str_record_list())
-        self.listbox.yview_moveto(fraction=1)
+        self._listbox.yview_moveto(fraction=1)
 
-    @staticmethod
-    def select_callback(event):
-        curselection = event.widget.curselection()
+    def select_callback(self, _):
+        index = self.get_index()
+        if index != -1:
+            record_frame.split_record(index)
+
+    def get_index(self) -> int:
+        curselection = self._listbox.curselection()
         if curselection:
-            record_frame.split_record(curselection[0])
+            return curselection[0]
+        return -1
 
 
 class RecordFrame(tk.Frame):
@@ -89,22 +94,21 @@ class RecordFrame(tk.Frame):
         self._text.insert('1.0', note)
 
     def _save_record(self):
-        curselection = record_list_frame.listbox.curselection()
-        if curselection:
+        index = record_list_frame.get_index()
+        if index == -1:
+            gui_manager.add_record(
+                tag=self._tag_var.get(),
+                note=self._text.get('1.0', tk.END + '-1c'),
+            )
+        else:
             error = not gui_manager.update_record(
-                index=curselection[0],
-                str_dt=self._dt_var.get(),
+                index, str_dt=self._dt_var.get(),
                 tag=self._tag_var.get(),
                 is_active=self.is_active_frame.get(),
                 note=self._text.get('1.0', tk.END + '-1c'),
             )
             if error:
                 self._text.insert('1.0', 'ValueError\n')
-        else:
-            gui_manager.add_record(
-                tag=self._tag_var.get(),
-                note=self._text.get('1.0', tk.END + '-1c'),
-            )
 
 
 class IsActiveFrame(tk.Frame):
