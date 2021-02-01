@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import List
+from typing import List, Tuple
 
 from datageter import DataGetter
 from record import Record
@@ -72,7 +72,7 @@ class RecordList(DataGetter):
             return True
         return False
 
-    def filter_record(self, **kwargs) -> (List[int], List[str]):
+    def filter_record(self, **kwargs) -> Tuple[List[int], List[str]]:
         indexes, str_records = [], []
         for index, record in enumerate(self._get_data()):
             if self._is_filtered(record, **kwargs):

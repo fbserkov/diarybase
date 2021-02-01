@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional, Tuple
 
 from record import Record
 from recordlist import RecordList
@@ -47,5 +47,13 @@ class DiaryManager:
         old_id = self.tag_dict.set_id(new_id, tag)
         self.record_list.swap_tag_id(old_id, new_id)
 
-    def tag_filter(self, tag: str) -> str:
-        return self.record_list.filter_record(tag_id=self.tag_dict.get_id(tag))
+    def tag_filter(
+            self, tag: Optional[str] = None) -> Tuple[List[int], List[str]]:
+        if tag is None:
+            return (
+                list(range(len(self.record_list))),
+                [str(record) for record in self.record_list],
+            )
+        else:
+            return self.record_list.filter_record(
+                tag_id=self.tag_dict.get_id(tag))

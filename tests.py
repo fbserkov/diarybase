@@ -596,16 +596,26 @@ class TestDiaryManager(unittest.TestCase):
         self._diary_manager.add_record(
             dt, 'second tag', note='fourth note', update=True)
 
-        self.assertEqual(
-            '[27.01.2021 12:52:00] <first tag> first note\n'
+        indexes, str_records = self._diary_manager.tag_filter()
+        self.assertEqual([0, 1, 2, 3], indexes)
+        self.assertEqual([
+            '[27.01.2021 12:52:00] <first tag> first note',
+            '[27.01.2021 12:52:00] <second tag> second note',
             '[27.01.2021 12:52:00] <first tag> third note',
-            self._diary_manager.tag_filter('first tag'),
-        )
-        self.assertEqual(
-            '[27.01.2021 12:52:00] <second tag> second note\n'
             '[27.01.2021 12:52:00] <second tag> fourth note',
-            self._diary_manager.tag_filter('second tag'),
-        )
+        ], str_records)
+        indexes, str_records = self._diary_manager.tag_filter('first tag')
+        self.assertEqual([0, 2], indexes)
+        self.assertEqual([
+            '[27.01.2021 12:52:00] <first tag> first note',
+            '[27.01.2021 12:52:00] <first tag> third note',
+        ], str_records)
+        indexes, str_records = self._diary_manager.tag_filter('second tag')
+        self.assertEqual([1, 3], indexes)
+        self.assertEqual([
+            '[27.01.2021 12:52:00] <second tag> second note',
+            '[27.01.2021 12:52:00] <second tag> fourth note',
+        ], str_records)
 
     def tearDown(self) -> None:
         db.clear()
