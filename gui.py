@@ -83,10 +83,9 @@ class RecordFrame(tk.Frame):
         frame = tk.Frame(self)
         frame.pack(side=tk.LEFT)
         self._dt_var = tk.StringVar(frame)
-        self._tag_var = tk.StringVar(frame)
         tk.Entry(frame, width=20, textvariable=self._dt_var).pack()
-        tk.Entry(frame, width=20, textvariable=self._tag_var).pack()
-        TagSelector(frame).pack()
+        self._tag_selector = TagSelector(frame)
+        self._tag_selector.pack()
         self.is_active_frame = IsActiveFrame(frame)
         self.is_active_frame.pack()
 
@@ -101,7 +100,7 @@ class RecordFrame(tk.Frame):
 
     def init(self):
         self._dt_var.set('')
-        self._tag_var.set('')
+        self._tag_selector.set('')
         self.is_active_frame.init()
         self._text.delete('1.0', tk.END)
         self._update_var.set(0)
@@ -109,7 +108,7 @@ class RecordFrame(tk.Frame):
     def split_record(self, index: int) -> None:
         dt, tag, is_active, note = gui_manager.split_record(index)
         self._dt_var.set(dt)
-        self._tag_var.set(tag)
+        self._tag_selector.set(tag)
         self.is_active_frame.set(is_active)
         self._text.delete('1.0', tk.END)
         self._text.insert('1.0', note)
@@ -120,7 +119,7 @@ class RecordFrame(tk.Frame):
 
     def _add_record(self) -> None:
         exc = gui_manager.add_record(
-            tag=self._tag_var.get(),
+            tag=self._tag_selector.get(),
             is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
             update=self._update_var.get(),
@@ -134,7 +133,7 @@ class RecordFrame(tk.Frame):
     def _update_record(self, index: int) -> None:
         exc = gui_manager.update_record(
             index, str_dt=self._dt_var.get(),
-            tag=self._tag_var.get(),
+            tag=self._tag_selector.get(),
             is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
             update=self._update_var.get(),
@@ -148,10 +147,16 @@ class RecordFrame(tk.Frame):
 class TagSelector(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        _tag_var = tk.StringVar(self)
-        _om = tk.OptionMenu(self, _tag_var, *gui_manager.get_tags())
+        self._tag_var = tk.StringVar(self)
+        _om = tk.OptionMenu(self, self._tag_var, *gui_manager.get_tags())
         _om.configure(width=20)
         _om.pack()
+
+    def set(self, tag):
+        self._tag_var.set(tag)
+
+    def get(self):
+        return self._tag_var.get()
 
 
 class IsActiveFrame(tk.Frame):
