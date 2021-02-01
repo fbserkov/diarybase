@@ -60,7 +60,7 @@ class RecordList(DataGetter):
             self._round_to_seconds_tenths(r), self._none_is_false(r)))
 
     @staticmethod
-    def _round_to_seconds_tenths(record):
+    def _round_to_seconds_tenths(record: Record):
         dt = record.get_dt()
         td = timedelta(microseconds=dt.microsecond % 100000)
         return dt - td

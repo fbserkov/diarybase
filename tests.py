@@ -119,8 +119,7 @@ class TestRecord(unittest.TestCase):
 
     def test_dt(self):
         dt = datetime(year=2021, month=1, day=18, hour=18, minute=26)
-        r = Record()
-        r.set_dt(dt)
+        r = Record(dt)
         self.assertEqual(dt, r.get_dt())
         self.assertEqual('[18.01.2021 18:26:00] <no tag>', str(r))
 
