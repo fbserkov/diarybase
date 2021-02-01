@@ -40,12 +40,14 @@ class RecordListFrame(tk.Frame):
         self._listbox.configure(yscrollcommand=sb.set)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
 
+        self._index_list = None
         self.update_listbox()
         self.move_view_to_end()
 
     def update_listbox(self):
         self._listbox.selection_clear(0, tk.END)
-        self._listbox_var.set(gui_manager.str_record_list())
+        self._index_list, value = gui_manager.str_record_list()
+        self._listbox_var.set(value)
         record_frame.init()
 
     def move_view_to_end(self):
@@ -59,7 +61,7 @@ class RecordListFrame(tk.Frame):
     def get_index(self) -> int:
         curselection = self._listbox.curselection()
         if curselection:
-            return curselection[0]
+            return self._index_list[curselection[0]]
         return -1
 
 
@@ -136,7 +138,10 @@ class TagSelector(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self._tag_var = tk.StringVar(self)
-        _om = tk.OptionMenu(self, self._tag_var, *gui_manager.get_tags())
+        _om = tk.OptionMenu(
+            self, self._tag_var, *gui_manager.get_tags(),
+            command=lambda _: None,
+        )
         _om.configure(width=20)
         _om.pack()
 

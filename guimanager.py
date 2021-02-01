@@ -39,11 +39,12 @@ class GUIManager:
         self._diary_manager.record_list.delete_last_record()
 
     @load_and_save
-    def str_record_list(self) -> List[str]:
-        result = []
-        for record in self._diary_manager.record_list:
+    def str_record_list(self) -> (List[int], List[str]):
+        index_list, result = [], []
+        for index, record in enumerate(self._diary_manager.record_list):
+            index_list.append(index)
             result.append(str(record))
-        return result
+        return index_list, result
 
     @load_and_save
     def split_record(self, index: int) -> Tuple[str, str, Optional[bool], str]:
