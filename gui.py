@@ -36,9 +36,9 @@ class RecordListFrame(tk.Frame):
 
         frame = tk.Frame(self)
         frame.pack()
-        self.listbox_var = tk.StringVar(frame)
+        self._listbox_var = tk.StringVar(frame)
         self.listbox = tk.Listbox(
-            frame, width=80, listvariable=self.listbox_var)
+            frame, width=80, listvariable=self._listbox_var)
         self.listbox.bind('<<ListboxSelect>>', record_frame.split_record)
         self.listbox.pack(side=tk.LEFT)
         sb = tk.Scrollbar(frame, command=self.listbox.yview)
@@ -47,7 +47,7 @@ class RecordListFrame(tk.Frame):
         self.update_record_list()
 
     def update_record_list(self):
-        self.listbox_var.set(gui_manager.str_record_list())
+        self._listbox_var.set(gui_manager.str_record_list())
         self.listbox.yview_moveto(fraction=1)
 
 
