@@ -8,7 +8,7 @@ from guimanager import GUIManager
 def add_update_call(to_wrap):
     def wrapper():
         to_wrap()
-        record_list_frame.update_record_list()
+        record_list_frame.update_listbox()
     return wrapper
 
 
@@ -25,7 +25,7 @@ class MenuFrame(tk.Frame):
         ).pack()
         tk.Button(
             self, text=UPDATE,
-            command=record_list_frame.update_record_list,
+            command=record_list_frame.update_listbox,
         ).pack()
 
 
@@ -44,9 +44,9 @@ class RecordListFrame(tk.Frame):
         sb = tk.Scrollbar(frame, command=self._listbox.yview)
         self._listbox.configure(yscrollcommand=sb.set)
         sb.pack(side=tk.RIGHT, fill=tk.Y)
-        self.update_record_list()
+        self.update_listbox()
 
-    def update_record_list(self):
+    def update_listbox(self):
         self._listbox_var.set(gui_manager.str_record_list())
         self._listbox.yview_moveto(fraction=1)
 
