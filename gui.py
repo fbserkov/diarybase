@@ -115,6 +115,7 @@ class RecordFrame(tk.Frame):
     def _add_record(self) -> None:
         gui_manager.add_record(
             tag=self._tag_var.get(),
+            is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
         )
 
