@@ -288,16 +288,18 @@ class TestRecordList(unittest.TestCase):
         self._record_list.append(Record(dt, note='third'))
         self._record_list.append(Record(dt, tag_id=1, note='fourth'))
 
-        self.assertEqual(
-            '[27.01.2021 12:40:00] <no tag> first\n'
+        indexes, str_records = self._record_list.filter_record(tag_id=0)
+        self.assertEqual([0, 2], indexes)
+        self.assertEqual([
+            '[27.01.2021 12:40:00] <no tag> first',
             '[27.01.2021 12:40:00] <no tag> third',
-            self._record_list.filter_record(tag_id=0),
-        )
-        self.assertEqual(
-            '[27.01.2021 12:40:00] <test tag> second\n'
+        ], str_records)
+        indexes, str_records = self._record_list.filter_record(tag_id=1)
+        self.assertEqual([1, 3], indexes)
+        self.assertEqual([
+            '[27.01.2021 12:40:00] <test tag> second',
             '[27.01.2021 12:40:00] <test tag> fourth',
-            self._record_list.filter_record(tag_id=1),
-        )
+        ], str_records)
 
     def test_note_filter(self):
         dt = datetime(year=2021, month=1, day=25, hour=19, minute=32)
@@ -305,27 +307,31 @@ class TestRecordList(unittest.TestCase):
         self._record_list.append(Record(dt, note='BCD'))
         self._record_list.append(Record(dt, note='CDA'))
 
-        self.assertEqual(
-            '[25.01.2021 19:32:00] <no tag> ABC\n'
+        indexes, str_records = self._record_list.filter_record(fragment='A')
+        self.assertEqual([0, 2], indexes)
+        self.assertEqual([
+            '[25.01.2021 19:32:00] <no tag> ABC',
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.filter_record(fragment='A'),
-        )
-        self.assertEqual(
-            '[25.01.2021 19:32:00] <no tag> ABC\n'
+        ], str_records)
+        indexes, str_records = self._record_list.filter_record(fragment='B')
+        self.assertEqual([0, 1], indexes)
+        self.assertEqual([
+            '[25.01.2021 19:32:00] <no tag> ABC',
             '[25.01.2021 19:32:00] <no tag> BCD',
-            self._record_list.filter_record(fragment='B'),
-        )
-        self.assertEqual(
-            '[25.01.2021 19:32:00] <no tag> ABC\n'
-            '[25.01.2021 19:32:00] <no tag> BCD\n'
+        ], str_records)
+        indexes, str_records = self._record_list.filter_record(fragment='C')
+        self.assertEqual([0, 1, 2], indexes)
+        self.assertEqual([
+            '[25.01.2021 19:32:00] <no tag> ABC',
+            '[25.01.2021 19:32:00] <no tag> BCD',
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.filter_record(fragment='C'),
-        )
-        self.assertEqual(
-            '[25.01.2021 19:32:00] <no tag> BCD\n'
+        ], str_records)
+        indexes, str_records = self._record_list.filter_record(fragment='D')
+        self.assertEqual([1, 2], indexes)
+        self.assertEqual([
+            '[25.01.2021 19:32:00] <no tag> BCD',
             '[25.01.2021 19:32:00] <no tag> CDA',
-            self._record_list.filter_record(fragment='D'),
-        )
+        ], str_records)
 
     def test_tag_id_and_note_filter(self):
         dt = datetime(year=2021, month=1, day=27, hour=20, minute=53)
@@ -335,19 +341,19 @@ class TestRecordList(unittest.TestCase):
         self._record_list.append(Record(dt, tag_id=1, note='note B'))
 
         self.assertEqual(
-            '[27.01.2021 20:53:00] <no tag> note A',
+            ([0], ['[27.01.2021 20:53:00] <no tag> note A']),
             self._record_list.filter_record(tag_id=0, fragment='A'),
         )
         self.assertEqual(
-            '[27.01.2021 20:53:00] <no tag> note B',
+            ([1], ['[27.01.2021 20:53:00] <no tag> note B']),
             self._record_list.filter_record(tag_id=0, fragment='B'),
         )
         self.assertEqual(
-            '[27.01.2021 20:53:00] <test tag> note A',
+            ([2], ['[27.01.2021 20:53:00] <test tag> note A']),
             self._record_list.filter_record(tag_id=1, fragment='A'),
         )
         self.assertEqual(
-            '[27.01.2021 20:53:00] <test tag> note B',
+            ([3], ['[27.01.2021 20:53:00] <test tag> note B']),
             self._record_list.filter_record(tag_id=1, fragment='B'),
         )
 

@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import List
 
 from datageter import DataGetter
 from record import Record
@@ -71,14 +72,13 @@ class RecordList(DataGetter):
             return True
         return False
 
-    def filter_record(self, **kwargs) -> str:
-        records = self._filter(**kwargs)
-        return '\n'.join(str(r) for r in records)
-
-    def _filter(self, **kwargs):
-        for record in self._get_data():
+    def filter_record(self, **kwargs) -> (List[int], List[str]):
+        indexes, str_records = [], []
+        for index, record in enumerate(self._get_data()):
             if self._is_filtered(record, **kwargs):
-                yield record
+                indexes.append(index)
+                str_records.append(str(record))
+        return indexes, str_records
 
     @staticmethod
     def _is_filtered(r: Record, **kwargs) -> bool:
