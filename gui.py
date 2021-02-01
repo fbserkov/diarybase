@@ -82,10 +82,10 @@ class RecordFrame(tk.Frame):
         self._text.pack(side=tk.LEFT)
         tk.Button(
             frame, text=SAVE,
-            command=add_update_call(self._save_record),
+            command=add_update_call(self._save_callback),
         ).pack(side=tk.LEFT)
 
-    def split_record(self, index):
+    def split_record(self, index: int) -> None:
         dt, tag, is_active, note = gui_manager.split_record(index)
         self._dt_var.set(dt)
         self._tag_var.set(tag)
@@ -93,22 +93,25 @@ class RecordFrame(tk.Frame):
         self._text.delete('1.0', tk.END)
         self._text.insert('1.0', note)
 
-    def _save_record(self):
+    def _save_callback(self) -> None:
         index = record_list_frame.get_index()
-        if index == -1:
-            gui_manager.add_record(
-                tag=self._tag_var.get(),
-                note=self._text.get('1.0', tk.END + '-1c'),
-            )
-        else:
-            error = not gui_manager.update_record(
-                index, str_dt=self._dt_var.get(),
-                tag=self._tag_var.get(),
-                is_active=self.is_active_frame.get(),
-                note=self._text.get('1.0', tk.END + '-1c'),
-            )
-            if error:
-                self._text.insert('1.0', 'ValueError\n')
+        self._add_record() if index == -1 else self._update_record(index)
+
+    def _add_record(self) -> None:
+        gui_manager.add_record(
+            tag=self._tag_var.get(),
+            note=self._text.get('1.0', tk.END + '-1c'),
+        )
+
+    def _update_record(self, index: int) -> None:
+        error = not gui_manager.update_record(
+            index, str_dt=self._dt_var.get(),
+            tag=self._tag_var.get(),
+            is_active=self.is_active_frame.get(),
+            note=self._text.get('1.0', tk.END + '-1c'),
+        )
+        if error:
+            self._text.insert('1.0', 'ValueError\n')
 
 
 class IsActiveFrame(tk.Frame):
