@@ -56,7 +56,9 @@ class RecordListFrame(tk.Frame):
         self.move_view_to_end()
 
     def update_listbox(self):
+        self._listbox.selection_clear(0, tk.END)
         self._listbox_var.set(gui_manager.str_record_list())
+        record_frame.init()
 
     def move_view_to_end(self):
         self._listbox.yview_moveto(fraction=1)
@@ -93,6 +95,12 @@ class RecordFrame(tk.Frame):
         self._text.pack(side=tk.LEFT)
         tk.Button(
             frame, text=SAVE, command=self._save_callback).pack(side=tk.LEFT)
+
+    def init(self):
+        self._dt_var.set('')
+        self._tag_var.set('')
+        self.is_active_frame.init()
+        self._text.delete('1.0', tk.END)
 
     def split_record(self, index: int) -> None:
         dt, tag, is_active, note = gui_manager.split_record(index)
@@ -143,6 +151,10 @@ class IsActiveFrame(tk.Frame):
             self, text='end', variable=self.end_var,
             command=lambda: self.start_var.set(0),
         ).pack(side=tk.LEFT)
+
+    def init(self):
+        self.start_var.set(0)
+        self.end_var.set(0)
 
     def set(self, is_active: Optional[bool]):
         if is_active:
