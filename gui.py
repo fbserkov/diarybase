@@ -39,7 +39,7 @@ class RecordListFrame(tk.Frame):
         self._listbox_var = tk.StringVar(frame)
         self.listbox = tk.Listbox(
             frame, width=80, listvariable=self._listbox_var)
-        self.listbox.bind('<<ListboxSelect>>', record_frame.split_record)
+        self.listbox.bind('<<ListboxSelect>>', self.select_callback)
         self.listbox.pack(side=tk.LEFT)
         sb = tk.Scrollbar(frame, command=self.listbox.yview)
         self.listbox.configure(yscrollcommand=sb.set)
@@ -49,6 +49,12 @@ class RecordListFrame(tk.Frame):
     def update_record_list(self):
         self._listbox_var.set(gui_manager.str_record_list())
         self.listbox.yview_moveto(fraction=1)
+
+    @staticmethod
+    def select_callback(event):
+        curselection = event.widget.curselection()
+        if curselection:
+            record_frame.split_record(curselection[0])
 
 
 class RecordFrame(tk.Frame):
@@ -74,11 +80,8 @@ class RecordFrame(tk.Frame):
             command=add_update_call(self._save_record),
         ).pack(side=tk.LEFT)
 
-    def split_record(self, event):
-        curselection = event.widget.curselection()
-        if not curselection:
-            return
-        dt, tag, is_active, note = gui_manager.split_record(curselection[0])
+    def split_record(self, index):
+        dt, tag, is_active, note = gui_manager.split_record(index)
         self._dt_var.set(dt)
         self._tag_var.set(tag)
         self.is_active_frame.set(is_active)
