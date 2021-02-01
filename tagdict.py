@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from datageter import DataGetter
 
 
@@ -14,11 +16,14 @@ class TagDict(DataGetter):
             return 'KeyError: ' + str(item)
 
     def __str__(self) -> str:
-        items = sorted(
+        return '\n'.join(
+            f'{_id}) {tag}' for _id, tag in self.get_sorted_items())
+
+    def get_sorted_items(self) -> List[Tuple[int, str]]:
+        return sorted(
             self._get_data().items(),
             key=lambda item: item[1].lower(),
         )
-        return '\n'.join(f'{_id}) {tag}' for _id, tag in items)
 
     def add(self, tag: str) -> int:
         _id = self.get_id(tag)

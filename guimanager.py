@@ -27,6 +27,11 @@ class GUIManager:
         )
 
     @load_and_save
+    def get_tags(self):
+        items = self._diary_manager.tag_dict.get_sorted_items()
+        return (tag for _, tag in items)
+
+    @load_and_save
     def add_record(
             self, tag: str = '', is_active: Optional[bool] = None,
             note: str = '', update=False,

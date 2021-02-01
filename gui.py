@@ -86,6 +86,7 @@ class RecordFrame(tk.Frame):
         self._tag_var = tk.StringVar(frame)
         tk.Entry(frame, width=20, textvariable=self._dt_var).pack()
         tk.Entry(frame, width=20, textvariable=self._tag_var).pack()
+        TagSelector(frame).pack()
         self.is_active_frame = IsActiveFrame(frame)
         self.is_active_frame.pack()
 
@@ -142,6 +143,15 @@ class RecordFrame(tk.Frame):
             self._text.insert('1.0', exc)
         else:
             record_list_frame.update_listbox()
+
+
+class TagSelector(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        _tag_var = tk.StringVar(self)
+        _om = tk.OptionMenu(self, _tag_var, *gui_manager.get_tags())
+        _om.configure(width=20)
+        _om.pack()
 
 
 class IsActiveFrame(tk.Frame):
