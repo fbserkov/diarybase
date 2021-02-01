@@ -145,8 +145,6 @@ class TestRecord(unittest.TestCase):
         r = Record(dt, note='test')
         self.assertEqual('test', r.get_note())
         self.assertEqual('[18.01.2021 11:11:00] <no tag> test', str(r))
-        r.set_note('Test!')
-        self.assertEqual('[18.01.2021 11:11:00] <no tag> Test!', str(r))
 
     def tearDown(self) -> None:
         db.clear()

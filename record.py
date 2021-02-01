@@ -51,8 +51,5 @@ class Record:
     def get_note(self) -> str:
         return self._note
 
-    def set_note(self, note: str) -> None:
-        self._note = note
-
     def is_active(self) -> Optional[bool]:
         return self._is_active
