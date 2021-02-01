@@ -40,11 +40,7 @@ class GUIManager:
 
     @load_and_save
     def str_record_list(self) -> (List[int], List[str]):
-        index_list, result = [], []
-        for index, record in enumerate(self._diary_manager.record_list):
-            index_list.append(index)
-            result.append(str(record))
-        return index_list, result
+        return self._diary_manager.tag_filter()
 
     @load_and_save
     def split_record(self, index: int) -> Tuple[str, str, Optional[bool], str]:
