@@ -9,20 +9,8 @@ class MenuFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self.pack(side=tk.LEFT)
-
-        for text, command in gui_manager.text_and_command_list:
-            tk.Button(
-                self, text=text, command=self._button_callback(command)).pack()
         tk.Button(self, text=DELETE, command=self._delete_callback).pack()
         tk.Button(self, text=UPDATE, command=self._update_callback).pack()
-
-    @staticmethod
-    def _button_callback(command):
-        def wrapper():
-            command()
-            record_list_frame.update_listbox()
-            record_list_frame.move_view_to_end()
-        return wrapper
 
     @staticmethod
     def _delete_callback():
@@ -45,7 +33,7 @@ class RecordListFrame(tk.Frame):
         frame.pack()
         self._listbox_var = tk.StringVar(frame)
         self._listbox = tk.Listbox(
-            frame, width=80, listvariable=self._listbox_var)
+            frame, width=80, height=20, listvariable=self._listbox_var)
         self._listbox.bind('<<ListboxSelect>>', self.select_callback)
         self._listbox.pack(side=tk.LEFT)
         sb = tk.Scrollbar(frame, command=self._listbox.yview)

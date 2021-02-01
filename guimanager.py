@@ -1,6 +1,5 @@
 from typing import List, Optional, Tuple
 
-from const import TEXT_TAG_IS_ACTIVE
 from database import db
 from datetime_format import datetime_to_str, str_to_datetime
 from diarymanager import DiaryManager
@@ -18,13 +17,6 @@ def load_and_save(to_wrap):
 class GUIManager:
     def __init__(self):
         self._diary_manager = DiaryManager()
-        self.text_and_command_list = (
-            (
-                text, lambda t=tag, ia=is_active:
-                self.add_record(t, ia),
-            )
-            for text, tag, is_active in TEXT_TAG_IS_ACTIVE
-        )
 
     @load_and_save
     def get_tags(self):
