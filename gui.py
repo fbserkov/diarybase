@@ -89,18 +89,21 @@ class RecordFrame(tk.Frame):
         self.is_active_frame = IsActiveFrame(frame)
         self.is_active_frame.pack()
 
+        self._text = tk.Text(self, width=40, height=4)
+        self._text.pack(side=tk.LEFT)
+
         frame = tk.Frame(self)
         frame.pack(side=tk.LEFT)
-        self._text = tk.Text(frame, width=40, height=4)
-        self._text.pack(side=tk.LEFT)
-        tk.Button(
-            frame, text=SAVE, command=self._save_callback).pack(side=tk.LEFT)
+        self._update_var = tk.IntVar(self)
+        tk.Checkbutton(frame, text='update', variable=self._update_var).pack()
+        tk.Button(frame, text=SAVE, command=self._save_callback).pack()
 
     def init(self):
         self._dt_var.set('')
         self._tag_var.set('')
         self.is_active_frame.init()
         self._text.delete('1.0', tk.END)
+        self._update_var.set(0)
 
     def split_record(self, index: int) -> None:
         dt, tag, is_active, note = gui_manager.split_record(index)
@@ -112,30 +115,33 @@ class RecordFrame(tk.Frame):
 
     def _save_callback(self) -> None:
         index = record_list_frame.get_index()
-        if index == -1:
-            self._add_record()
-            record_list_frame.update_listbox()
-            record_list_frame.move_view_to_end()
-        else:
-            self._update_record(index)
-            record_list_frame.update_listbox()
+        self._add_record() if index == -1 else self._update_record(index)
 
     def _add_record(self) -> None:
-        gui_manager.add_record(
+        exc = gui_manager.add_record(
             tag=self._tag_var.get(),
             is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
+            update=self._update_var.get(),
         )
+        if exc:
+            self._text.insert('1.0', exc)
+        else:
+            record_list_frame.update_listbox()
+            record_list_frame.move_view_to_end()
 
     def _update_record(self, index: int) -> None:
-        error = not gui_manager.update_record(
+        exc = gui_manager.update_record(
             index, str_dt=self._dt_var.get(),
             tag=self._tag_var.get(),
             is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
+            update=self._update_var.get(),
         )
-        if error:
-            self._text.insert('1.0', 'ValueError\n')
+        if exc:
+            self._text.insert('1.0', exc)
+        else:
+            record_list_frame.update_listbox()
 
 
 class IsActiveFrame(tk.Frame):

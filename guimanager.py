@@ -29,9 +29,13 @@ class GUIManager:
     @load_and_save
     def add_record(
             self, tag: str = '', is_active: Optional[bool] = None,
-            note: str = '',
-    ) -> None:
-        self._diary_manager.add_record(tag=tag, is_active=is_active, note=note)
+            note: str = '', update=False,
+    ) -> Optional[Exception]:
+        try:
+            self._diary_manager.add_record(
+                tag=tag, is_active=is_active, note=note, update=update)
+        except Exception as exc:
+            return exc
 
     @load_and_save
     def delete_last_record(self) -> None:
@@ -59,14 +63,16 @@ class GUIManager:
     def update_record(
             self, index: int, str_dt: str, tag: str,
             is_active: Optional[bool], note: str, update=False,
-    ) -> bool:
+    ) -> Optional[Exception]:
         if str_dt:
             try:
                 dt = str_to_datetime(str_dt)
-            except ValueError:
-                return False
+            except Exception as exc:
+                return exc
         else:
             dt = None
-        self._diary_manager.update_record(
-            index, dt, tag, is_active, note, update)
-        return True
+        try:
+            self._diary_manager.update_record(
+                index, dt, tag, is_active, note, update)
+        except Exception as exc:
+            return exc
