@@ -40,10 +40,6 @@ class RecordList(DataGetter):
     def delete_last_record(self):
         self._get_data().pop()
 
-    def replace_note(self, num_from_end: int, note: str):
-        record = self._get_data()[-num_from_end]
-        record.set_note(note)
-
     def swap_tag_id(self, id_1, id_2):
         for record in self:
             if record.get_tag_id() == id_1:

@@ -34,10 +34,6 @@ class DiaryManager:
     def _tag_to_tag_id(self, tag) -> int:
         return self.tag_dict.get_id(tag)
 
-    def replace_note(self, num_from_end: int, note: str, update=False):
-        self.word_set.check_note(note, update)
-        self.record_list.replace_note(num_from_end, note)
-
     def tag_stat(self) -> str:
         tag_id_stat = self.record_list.get_tag_id_stat()
         for tag_id in self.tag_dict:
