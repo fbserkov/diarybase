@@ -25,12 +25,13 @@ class GUIManager:
 
     @load_and_save
     def add_record(
-            self, tag: str = '', is_active: Optional[bool] = None,
+            self, str_dt: str, tag: str = '',
+            is_active: Optional[bool] = None,
             note: str = '', update=False,
     ) -> Optional[Exception]:
         try:
-            self._diary_manager.add_record(
-                tag=tag, is_active=is_active, note=note, update=update)
+            dt = str_to_datetime(str_dt) if str_dt else None
+            self._diary_manager.add_record(dt, tag, is_active, note, update)
         except Exception as exc:
             return exc
 

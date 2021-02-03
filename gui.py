@@ -54,7 +54,8 @@ class RecordListFrame(tk.Frame):
         self._index_list, value = gui_manager.str_record_list(self.current_tag)
         self._listbox.selection_clear(0, tk.END)
         self._listbox_var.set(value)
-        record_frame.init()
+        if not tag:
+            record_frame.init()
 
     def move_view_to_end(self):
         self._listbox.yview_moveto(fraction=1)
@@ -115,6 +116,7 @@ class RecordFrame(tk.Frame):
 
     def _add_record(self) -> None:
         exc = gui_manager.add_record(
+            str_dt=self._dt_var.get(),
             tag=self._tag_selector.get(),
             is_active=self.is_active_frame.get(),
             note=self._text.get('1.0', tk.END + '-1c'),
