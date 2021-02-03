@@ -39,8 +39,9 @@ class GUIManager:
         self._diary_manager.record_list.delete_record(index)
 
     @load_and_save
-    def str_record_list(self) -> (List[int], List[str]):
-        return self._diary_manager.tag_filter()
+    def str_record_list(
+            self, tag: Optional[str] = None) -> (List[int], List[str]):
+        return self._diary_manager.tag_filter(tag)
 
     @load_and_save
     def split_record(self, index: int) -> Tuple[str, str, Optional[bool], str]:

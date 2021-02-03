@@ -1,7 +1,6 @@
 import tkinter as tk
 from typing import Optional
 
-from const import DELETE, SAVE, UPDATE
 from guimanager import GUIManager
 
 
@@ -9,8 +8,8 @@ class MenuFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self.pack(side=tk.LEFT)
-        tk.Button(self, text=DELETE, command=self._delete_callback).pack()
-        tk.Button(self, text=UPDATE, command=self._update_callback).pack()
+        tk.Button(self, text='DEL', command=self._delete_callback).pack()
+        tk.Button(self, text='INIT', command=self._update_callback).pack()
 
     @staticmethod
     def _delete_callback() -> None:
@@ -23,6 +22,7 @@ class MenuFrame(tk.Frame):
 
     @staticmethod
     def _update_callback():
+        record_list_frame.current_tag = None
         record_list_frame.update_listbox()
         record_list_frame.move_view_to_end()
 
@@ -31,6 +31,7 @@ class RecordListFrame(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self.pack(side=tk.RIGHT)
+        self.current_tag = None
 
         frame = tk.Frame(self)
         frame.pack()
@@ -47,8 +48,10 @@ class RecordListFrame(tk.Frame):
         self.update_listbox()
         self.move_view_to_end()
 
-    def update_listbox(self):
-        self._index_list, value = gui_manager.str_record_list()
+    def update_listbox(self, tag: Optional[str] = None):
+        if tag:
+            self.current_tag = tag
+        self._index_list, value = gui_manager.str_record_list(self.current_tag)
         self._listbox.selection_clear(0, tk.END)
         self._listbox_var.set(value)
         record_frame.init()
@@ -89,7 +92,7 @@ class RecordFrame(tk.Frame):
         frame.pack(side=tk.LEFT)
         self._update_var = tk.IntVar(self)
         tk.Checkbutton(frame, text='update', variable=self._update_var).pack()
-        tk.Button(frame, text=SAVE, command=self._save_callback).pack()
+        tk.Button(frame, text='Save', command=self._save_callback).pack()
 
     def init(self):
         self._dt_var.set('')
@@ -143,7 +146,8 @@ class TagSelector(tk.Frame):
         self._tag_var = tk.StringVar(self)
         _om = tk.OptionMenu(
             self, self._tag_var, *gui_manager.get_tags(),
-            command=lambda _: None,
+            command=lambda _: record_list_frame.update_listbox(
+                self._tag_var.get()),
         )
         _om.configure(width=20)
         _om.pack()

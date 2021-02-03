@@ -1,6 +1,5 @@
 # Project exclude paths
 /venv/
-const.py
 main.db
 test.db
 usage.py
